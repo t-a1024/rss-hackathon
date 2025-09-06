@@ -3,6 +3,7 @@ import { useState } from "react";
 import Heading from "../components/Heading/Heading";
 import { IntegerStepperField } from "../components/IntegerInputField/IntegerInputField";
 import Button from "../components/Button/Button";
+import BG from "../Image/First.png";
 import BackgroundImage from "../Image/card_background.jpg";
 import { toast } from "react-toastify";
 import { Copy } from "lucide-react";
@@ -68,9 +69,12 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-6 animate-slide-up-fade pop">
+    <main
+      className="min-h-screen flex flex-col items-center justify-center p-4 animate-slide-up-fade pop bg-cover bg-center"
+      style={{ backgroundImage: `url(${BG})` }}
+    >
       <div
-        className="border-2 border-yellow-500 rounded-2xl shadow-md p-20 bg-cover bg-center"
+        className="border-2 border-yellow-500 rounded-2xl shadow-md p-15 bg-cover bg-center"
         style={{ backgroundImage: `url(${BackgroundImage})` }}
       >
         <Heading
@@ -79,7 +83,7 @@ export default function Home() {
           align="center"
           weight="bold"
           id="welcome"
-          className="text-black"
+          className="text-black text-xl md:text-5xl whitespace-nowrap"
         >
           <span className="text-orange-500">ナニモノ？</span>
           へようこそ
@@ -92,7 +96,8 @@ export default function Home() {
             align="center"
             weight="bold"
             id="participants"
-            className="text-black"
+            // モバイルではtext-xl、PC(md以上)ではtext-3xlに設定
+            className="text-black text-xl md:text-3xl"
           >
             参加人数を入力
           </Heading>
@@ -111,7 +116,10 @@ export default function Home() {
             />
           </div>
 
-          <p className="text-3sm text-black text-center">
+          <p
+            // モバイルではtext-base、PC(md以上)ではtext-lgに設定
+            className="text-black text-center text-base md:text-lg"
+          >
             現在の人数: <span className="font-medium">{count ?? "未入力"}</span>
           </p>
           <div className="flex justify-center">
@@ -119,7 +127,7 @@ export default function Home() {
               type="button"
               onClick={handleNext}
               className="inline-flex items-center justify-center rounded-full px-5 py-3 font-semibold
-            bg-gray-200 text-gray-900 hover:text-orange-500 active:translate-y-px transition"
+           bg-gray-200 text-gray-900 hover:text-orange-500 active:translate-y-px transition"
             >
               {loading ? "作成中..." : "完了"}
             </button>
