@@ -1,37 +1,34 @@
 // src/pages/ShowResult.tsx
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import Heading from "../components/Heading/Heading";
+import type { CompletedPayload, ProcessingPayload } from "../types/result";
+import Result from "../components/Result/Result"; 
 
 const API_BASE = import.meta.env.VITE_API_URL?.replace(/\/$/, "") || "/api";
+const NO_IMAGE = "/noimage.png";
 
-// 型（任意だが補助的に）
-type Participant = {
-  name: string;
-  birthdate: string;
-  age: number;
-  hometown: string;
-  affiliation: string; // 所属
-  aspiration: string;  // 意気込み
-  roleId?: string;
-  roleTitle?: string;
-  roleTitleEnglish?: string;
-  reason?: string;
-  tips?: string;
-};
-type CompletedPayload = {
-  roomId: string;
-  status: "completed";
-  generatedAt: string;
-  participants: number;
-  results: Participant[];
-};
-type ProcessingPayload = {
-  roomId: string;
-  status: "processing";
-  message?: string;
-  estimatedCompletionTime?: string;
+const toResultProps = (p: any) => {
+  const title =
+    p.roleTitle && p.roleTitleEnglish
+      ? `${p.roleTitle} / ${p.roleTitleEnglish}`
+      : p.roleTitle || p.roleTitleEnglish || "役職未設定";
+
+  return {
+    name: p.name ?? "名前不明",
+    role: {
+      title,
+      imageUrl: p.imageUrl ?? NO_IMAGE,
+      birthday: p.birthdate ?? "—",
+      age: p.age ?? "—",
+      enthusiasm: p.aspiration ?? "—",
+      birthplace: p.hometown ?? "—",
+      affiliation: p.affiliation ?? "—",
+      description: p.reason ?? "",
+      suitability: p.tips ?? "",
+    },
+  };
 };
 
 export default function ShowResult() {
@@ -47,6 +44,12 @@ export default function ShowResult() {
   const [loading, setLoading] = useState(false);
   const [completed, setCompleted] = useState<CompletedPayload | null>(null);
   const [processing, setProcessing] = useState<ProcessingPayload | null>(null);
+
+  const [idx, setIdx] = useState(0);
+
+  useEffect(() => {
+    setIdx(0);
+  }, [completed?.results?.length]);
 
   const fetchResults = async () => {
     if (!roomId) {
@@ -70,7 +73,11 @@ export default function ShowResult() {
         }
         const raw = await res.text();
         let err: any;
-        try { err = JSON.parse(raw); } catch { err = { message: raw }; }
+        try {
+          err = JSON.parse(raw);
+        } catch {
+          err = { message: raw };
+        }
         toast.error(`取得に失敗しました: ${err?.message || err?.error || `HTTP ${res.status}`}`);
         return;
       }
@@ -86,7 +93,6 @@ export default function ShowResult() {
           : "未定";
         toast.info(
           <div>
-            <div className="font-medium">結果はまだ生成中です。</div>
             <div className="mt-1 text-sm text-gray-700">{data.message || "しばらくお待ちください。"}</div>
             <div className="mt-1 text-xs text-gray-500">推定完了時刻: {eta}</div>
           </div>
@@ -102,6 +108,30 @@ export default function ShowResult() {
       setLoading(false);
     }
   };
+
+  const goPrev = useCallback(() => {
+    if (!completed) return;
+    const n = completed.results.length;
+    if (n <= 1) return;
+    setIdx((i) => (i - 1 + n) % n);
+  }, [completed]);
+
+  const goNext = useCallback(() => {
+    if (!completed) return;
+    const n = completed.results.length;
+    if (n <= 1) return;
+    setIdx((i) => (i + 1) % n);
+  }, [completed]);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (!completed || completed.results.length <= 1) return;
+      if (e.key === "ArrowLeft") goPrev();
+      if (e.key === "ArrowRight") goNext();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [completed, goPrev, goNext]);
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-6">
@@ -125,68 +155,42 @@ export default function ShowResult() {
           </button>
         </div>
 
-        {/* === 結果レンダリング === */}
-        {completed && (
-          <div className="space-y-4">
+        {/* ===== Result で表示（左右で切替） ===== */}
+        {completed && completed.results.length > 0 && (
+          <>
+            {/* メタ情報 */}
             <div className="rounded-lg border bg-white p-4">
               <p className="text-sm text-gray-600">
-                生成日時: <span className="font-medium">{new Date(completed.generatedAt).toLocaleString()}</span>
+                生成日時:{" "}
+                <span className="font-medium">
+                  {new Date(completed.generatedAt).toLocaleString()}
+                </span>
               </p>
               <p className="text-sm text-gray-600">
                 参加人数: <span className="font-medium">{completed.participants}</span>
               </p>
+              {completed.results.length > 1 && (
+                <p className="mt-1 text-xs text-gray-500">
+                  {idx + 1} / {completed.results.length}
+                </p>
+              )}
             </div>
 
-            <div className="grid grid-cols-1 gap-4">
-              {completed.results.map((p, idx) => (
-                <div key={idx} className="rounded-xl border bg-white p-4 shadow-sm">
-                  <div className="flex flex-col gap-2">
-                    <h3 className="text-lg font-bold">
-                      {p.name}
-                      {p.roleTitle && (
-                        <span className="ml-2 text-base font-semibold text-gray-700">
-                          （{p.roleTitle}{p.roleTitleEnglish ? ` / ${p.roleTitleEnglish}` : ""}）
-                        </span>
-                      )}
-                    </h3>
-
-                    <div className="text-sm text-gray-800 leading-6">
-                      <div>誕生日：{p.birthdate || "—"}</div>
-                      <div>年齢：{p.age ?? "—"}</div>
-                      <div>出身：{p.hometown || "—"}</div>
-                      <div>所属：{p.affiliation || "—"}</div>
-                      <div className="mt-1">
-                        意気込み：<span className="font-medium">{p.aspiration || "—"}</span>
-                      </div>
-                    </div>
-
-                    {(p.reason || p.tips) && (
-                      <div className="mt-3 rounded-lg border border-dashed p-3 text-sm text-gray-800">
-                        {p.reason && (
-                          <p className="mb-2">
-                            <span className="font-semibold">評価理由：</span>
-                            {p.reason}
-                          </p>
-                        )}
-                        {p.tips && (
-                          <p>
-                            <span className="font-semibold">活躍のヒント：</span>
-                            {p.tips}
-                          </p>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+            {/* 現在の人を表示 */}
+            <Result
+              {...toResultProps(completed.results[idx])}
+              onPrev={completed.results.length > 1 ? goPrev : undefined}
+              onNext={completed.results.length > 1 ? goNext : undefined}
+              showArrows={completed.results.length > 1}
+            />
+          </>
         )}
 
         {processing && (
           <div className="rounded-xl border bg-white p-4 text-center">
-            <p className="text-base font-semibold text-gray-800">結果はまだ生成中です。</p>
-            <p className="mt-1 text-sm text-gray-700">{processing.message || "しばらくお待ちください。"}</p>
+            <p className="text-base font-semibold text-gray-800">
+              {processing.message || "しばらくお待ちください。"}
+            </p>
             <p className="mt-1 text-xs text-gray-500">
               推定完了時刻：
               {processing.estimatedCompletionTime

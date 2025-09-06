@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import  { useState } from 'react';
 import type { RoomResultResponse } from '../../types/room-api';
 
 interface RoomResultDisplayProps {
