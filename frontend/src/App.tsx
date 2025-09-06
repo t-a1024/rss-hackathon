@@ -1,35 +1,31 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-
-function App() {
-  const [count, setCount] = useState(0)
-
+import "./util.css";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import BaseInfo from "./pages/BaseInfo";
+import QnA from "./pages/QnA/QnA";
+import "./index.css";
+import ShowResult from "./pages/ShowResult";
+export default function App() {
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <BrowserRouter>
+      <main className="relative z-10 min-h-screen overflow-hidden p-6">
+        <ToastContainer
+        position="top-center"
+        autoClose={7000}
+        closeOnClick
+        pauseOnHover
+        draggable
+        theme="light"
+      />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/rooms/:roomId" element={<BaseInfo/>}/>
+          <Route path="/rooms/:roomId/QnA" element={<QnA/>}/>
+          <Route path="/rooms/:roomId/results" element={<ShowResult />} />
+        </Routes>
+      </main>
+    </BrowserRouter>
+  );
 }
-
-export default App
