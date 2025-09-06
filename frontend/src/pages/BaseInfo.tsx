@@ -1,5 +1,5 @@
 // src/pages/BaseInfo.tsx
-import React, { useMemo, useState } from "react";
+import  {  useState } from "react";
 import Text from "../components/Text/text";
 import Heading from "../components/Heading/Heading";
 import OneLineInputField from "../components/OneLineInputField/OneLineInputField";
@@ -18,10 +18,7 @@ export default function BaseInfo() {
   const [affiliation, setAffiliation] = useState("");
   const [motivation, setMotivation] = useState("");
 
-  const allFilled = useMemo(
-    () => name && formatBirthdate(birthdate) && age && origin && affiliation && motivation,
-    [name, birthdate, age, origin, affiliation, motivation]
-  );
+
 
   const handleSubmit = () => {
     // 日付を YYYY-MM-DD 文字列へ

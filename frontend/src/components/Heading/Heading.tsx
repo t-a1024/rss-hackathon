@@ -1,10 +1,10 @@
-import React from "react";
 import type {
     HeadingProps,
     HeadingSize,
     HeadingWeight,
     HeadingAlign,
   } from "../../types/component/Layer1";
+  import type { ElementType } from "react";
   const sizeMap: Record<HeadingSize, string> = {
     display: "text-4xl sm:text-5xl md:text-6xl leading-tight",
     xl:      "text-3xl sm:text-4xl leading-tight",
@@ -41,7 +41,7 @@ import type {
     children,
     id,
   }: HeadingProps) {
-    const Tag = as as keyof JSX.IntrinsicElements;
+    const Tag = as as ElementType; 
   
     const title = (
       <span

@@ -1,5 +1,5 @@
 // src/pages/Home.tsx
-import React, { useState } from "react";
+import { useState } from "react";
 import Heading from "../components/Heading/Heading";
 import { IntegerStepperField } from "../components/IntegerInputField/IntegerInputField";
 import Button from "../components/Button/Button";
