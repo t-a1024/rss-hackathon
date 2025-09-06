@@ -3,7 +3,7 @@ require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
-const { assignRolesWithAI, getAvailableRoles } = require('./aiRoleAssignment');
+const { assignRolesWithAI, assignRolesForRoom, getAvailableRoles } = require('./aiRoleAssignment');
 
 const { randomUUID } = require('crypto');
 
@@ -74,6 +74,31 @@ function generateId() {
 function selectRandomQuestions(questions, count = 2) {
   const shuffled = [...questions].sort(() => 0.5 - Math.random());
   return shuffled.slice(0, count);
+}
+
+/** 役割割り振り結果の生成 */
+async function generateRoleAssignmentResults(roomId, answerData) {
+  try {    
+    const roleAssignmentResults = await assignRolesForRoom(answerData);
+    
+    const result = {
+      results: roleAssignmentResults,
+      generatedAt: new Date().toISOString()
+    };
+    
+    results.set(roomId, result);
+  } catch (error) {
+    console.error(`Failed to generate role assignments for room ${roomId}:`, error);
+    
+    // エラーが発生した場合もエラー情報を保存
+    const errorResult = {
+      error: 'Failed to generate role assignments',
+      message: error.message,
+      generatedAt: new Date().toISOString()
+    };
+    
+    results.set(roomId, errorResult);
+  }
 }
 
 // ルートエンドポイント
@@ -279,9 +304,9 @@ app.post('/rooms/:id/answers', async (req, res) => {
     answers.set(roomId, currentAnswers);
 
     // 部屋が満員になった場合、結果を生成
-    if (currentAnswers.length === room.capacity) {
-      console.log("結果が揃いました。");
-      console.log("全ての回答:", currentAnswers);
+    if (currentAnswers.length === room.capacity) {      
+      // 非同期で結果を生成（レスポンスを遅延させないため）
+      generateRoleAssignmentResults(roomId, currentAnswers);
     }
 
     res.status(201).json({
@@ -319,13 +344,25 @@ app.get('/rooms/:id/results', (req, res) => {
 
     if (result) {
       // 結果が生成されている場合
-      res.json({
-        roomId: roomId,
-        status: 'completed',
-        generatedAt: result.generatedAt,
-        participants: result.results.length,
-        results: result.results
-      });
+      if (result.error) {
+        // エラーが発生していた場合
+        res.status(500).json({
+          roomId: roomId,
+          status: 'error',
+          generatedAt: result.generatedAt,
+          error: result.error,
+          message: result.message
+        });
+      } else {
+        // 正常に結果が生成されている場合
+        res.json({
+          roomId: roomId,
+          status: 'completed',
+          generatedAt: result.generatedAt,
+          participants: result.results.length,
+          results: result.results
+        });
+      }
     } else {
       // 結果が生成されていない場合
       const remainingParticipants = room.capacity - currentAnswers.length;
@@ -358,9 +395,5 @@ app.get('/rooms/:id/results', (req, res) => {
 
 app.listen(port, () => {
   console.log(`🚀 Server listening on port ${port}`);
-  console.log(`📍 API endpoints:`);
-  console.log(`   POST /api/roles/assign - Assign roles to team members`);
-  console.log(`   GET  /api/roles - Get available roles`);
-  console.log(`   GET  /api/health - Health check`);
   console.log(`Allowed CORS origin: ${allowedOrigin}`);
 });
