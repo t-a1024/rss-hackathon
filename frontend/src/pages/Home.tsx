@@ -85,7 +85,7 @@ export default function Home() {
             name="participantsCount"
             value={count}
             onChange={setCount}
-            min={1}            // ← バックエンドの要件に合わせる（2〜10）
+            min={1}          
             max={10}
             step={1}
             size="md"

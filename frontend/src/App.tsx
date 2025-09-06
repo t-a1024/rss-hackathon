@@ -6,8 +6,8 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
+import BaseInfo from "./pages/BaseInfo";
 import "./index.css";
-import "./util.css";
 
 export default function App() {
   return (
@@ -23,6 +23,7 @@ export default function App() {
       />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/rooms/:roomId" element={<BaseInfo/>}/>
         </Routes>
       </main>
     </BrowserRouter>
