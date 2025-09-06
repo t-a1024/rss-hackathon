@@ -32,13 +32,9 @@ export default function QnA(){
     const [questions,setQuestions] = useState<Array<Question>>(dummyData);
     useEffect(() => {
         const fetchData = async () => {
-            console.log("useEffect!");
-
             try {
-                console.log(roomId);
                 const json: GetJSON = await getAPI(`rooms/${roomId}`);
                 setQuestions(json.questions);
-                console.log(json);
             } catch (err) {
                 console.log(err);
             }
@@ -69,26 +65,8 @@ export default function QnA(){
     };
 
     const handleClick = ()=>{
-        // POST する処理を書く
-        const postData = async(data:JSON) =>{
-            try{
-                const json = await postAPI(`rooms/${roomId}/answers`,data);
-                if (roomId)navigate(`/rooms/${roomId}/results`);
-                else toast.error("URL から roomId を取得できませんでした。");
-                console.log(json);
-            }catch(err){
-                console.log(err);
-                toast.error("質問の回答の送信に失敗しました。");
-            }
-        };
         // すべてに回答してもらうバリデーションの実装
-        let isCompleted = true;
-        for(let answer of post.answers){
-            if(!answer.value){
-                isCompleted = false;
-                break;
-            }
-        }
+        let isCompleted = post.answers.every(answer => answer.value);
         if(
             !isCompleted ||
             post.answers.length === 0
@@ -96,6 +74,17 @@ export default function QnA(){
             toast.error("全ての質問に回答してください。");
             return ;
         }
+        // POST する処理を書く
+        const postData = async(data:JSON) =>{
+            try{
+                const json = await postAPI(`rooms/${roomId}/answers`,data);
+                if (roomId)navigate(`/rooms/${roomId}/results`);
+                else toast.error("URL から roomId を取得できませんでした。");
+            }catch(err){
+                console.log(err);
+                toast.error("質問の回答の送信に失敗しました。");
+            }
+        };
         const jsonStr = JSON.stringify(post);
         const obj:JSON = JSON.parse(jsonStr);
         postData(obj);
