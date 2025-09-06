@@ -38,11 +38,9 @@ export default function Home() {
         return;
       }
 
-      // ★ レスポンスは { id, url }
       const data: { id: string; url?: string } = await res.json();
 
-      // urlが返ってこなかった場合のフォールバック
-      const roomUrl = data.url ?? `${window.location.origin}/rooms/${data.id}`;
+      const roomUrl = `${window.location.origin}/rooms/${data.id}`;
 
       toast.info(
         <div className="flex flex-col gap-2">
@@ -58,7 +56,6 @@ export default function Home() {
               aria-label="URLをコピー"
             >
               <Copy size={16} />
-              コピー
             </button>
           </div>
         </div>
@@ -88,11 +85,11 @@ export default function Home() {
             name="participantsCount"
             value={count}
             onChange={setCount}
-            min={2}            // ← バックエンドの要件に合わせる（2〜10）
+            min={1}            // ← バックエンドの要件に合わせる（2〜10）
             max={10}
             step={1}
             size="md"
-            placeholder="2"
+            placeholder="1"
           />
         </div>
 
