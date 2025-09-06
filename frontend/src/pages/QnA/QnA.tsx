@@ -80,6 +80,7 @@ export default function QnA(){
                 const json = await postAPI(`rooms/${roomId}/answers`,data);
                 if (roomId)navigate(`/rooms/${roomId}/results`);
                 else toast.error("URL から roomId を取得できませんでした。");
+                console.log("POST Request's responce is",json);
             }catch(err){
                 console.log(err);
                 toast.error("質問の回答の送信に失敗しました。");
