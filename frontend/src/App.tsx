@@ -10,7 +10,7 @@ import ShowResult from "./pages/ShowResult";
 export default function App() {
   return (
     <BrowserRouter>
-      <main className="relative z-10 min-h-screen overflow-hidden p-6">
+      <main className="relative z-10 min-h-screen overflow-hidden">
         <ToastContainer
         position="top-center"
         autoClose={7000}

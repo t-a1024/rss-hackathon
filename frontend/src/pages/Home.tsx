@@ -68,6 +68,7 @@ export default function Home() {
   };
 
   return (
+    <>
     <main
       className="min-h-screen flex flex-col items-center justify-center p-4 animate-slide-up-fade pop bg-cover bg-center"
       style={{ backgroundImage: `url(${BG})` }}
@@ -134,5 +135,6 @@ export default function Home() {
         </section>
       </div>
     </main>
+    </>
   );
 }

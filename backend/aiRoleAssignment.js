@@ -17,17 +17,27 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 /**
  * 部屋の回答データから役割を割り振る（新形式）
  * @param {Array} answerData - 回答データの配列
+ * @param {Array} questions - 質問リスト
  * @returns {Array} 役割割り振り結果
  */
-async function assignRolesForRoom(answerData) {
+async function assignRolesForRoom(answerData, questions = []) {
   try {
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
+    // 質問IDから質問内容へのマッピングを作成
+    const questionMap = {};
+    questions.forEach(q => {
+      questionMap[q.questionId] = q.question;
+    });
+    
     const prompt = `
-以下の参加者情報と回答を分析し、それぞれに最適な役割を割り振ってください。
+以下の参加者情報と質問への回答を分析し、それぞれに最適な役割を割り振ってください。
 
 利用可能な役割:
 ${availableRoles.map(role => `- ${role.id}: ${role.title} (${role.englishTitle}): ${role.description}`).join('\n')}
+
+質問リスト:
+${questions.map(q => `${q.questionId}: ${q.question}`).join('\n')}
 
 参加者情報と回答:
 ${answerData.map((data, index) => `
@@ -36,7 +46,10 @@ ${index + 1}. ${data.name} (${data.age}歳)
    出身: ${data.hometown}
    所属: ${data.affiliation}
    意気込み: ${data.aspiration}
-   回答: ${data.answers.map(a => `${a.questionId}: ${a.answer}`).join(', ')}
+   
+   質問への回答:
+${data.answers.map(a => `   Q: ${questionMap[a.questionId] || a.questionId}
+   A: ${a.value}`).join('\n')}
 `).join('')}
 
 以下のJSONフォーマットで回答してください:
