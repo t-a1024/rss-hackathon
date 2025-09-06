@@ -1,12 +1,10 @@
-import type { TeamRoleAssignmentRequest, TeamRoleAssignmentResponse, APIError } from '../types/api';
-
 const API_BASE_URL = 'http://localhost:3001/api';
 
 class APIClient {
-  private async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
+  async request(endpoint, options = {}) {
     const url = `${API_BASE_URL}${endpoint}`;
     
-    const config: RequestInit = {
+    const config = {
       headers: {
         'Content-Type': 'application/json',
         ...options.headers,
@@ -19,8 +17,7 @@ class APIClient {
       const data = await response.json();
 
       if (!response.ok) {
-        const error = data as APIError;
-        throw new Error(`API Error: ${error.message || 'Unknown error'}`);
+        throw new Error(`API Error: ${data.message || 'Unknown error'}`);
       }
 
       return data;
@@ -32,11 +29,11 @@ class APIClient {
     }
   }
 
-  async healthCheck(): Promise<{ status: string; timestamp: string; service: string }> {
+  async healthCheck() {
     return this.request('/health');
   }
 
-  async assignRoles(request: TeamRoleAssignmentRequest): Promise<TeamRoleAssignmentResponse> {
+  async assignRoles(request) {
     return this.request('/roles/assign', {
       method: 'POST',
       body: JSON.stringify(request),

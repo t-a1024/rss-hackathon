@@ -1,20 +1,16 @@
-import { Request, Response } from 'express';
 import { AIService } from '../services/aiService.js';
-import { TeamRoleAssignmentRequest, APIError } from '../types/index.js';
 
 export class RoleController {
-  private aiService: AIService;
-
   constructor() {
     this.aiService = new AIService();
   }
 
-  async assignRoles(req: Request, res: Response): Promise<void> {
+  async assignRoles(req, res) {
     try {
-      const { members, availableRoles }: TeamRoleAssignmentRequest = req.body;
+      const { members, availableRoles } = req.body;
 
       if (!members || !Array.isArray(members) || members.length === 0) {
-        const error: APIError = {
+        const error = {
           error: 'INVALID_INPUT',
           message: 'Members array is required and must not be empty'
         };
@@ -23,7 +19,7 @@ export class RoleController {
       }
 
       if (!availableRoles || !Array.isArray(availableRoles) || availableRoles.length === 0) {
-        const error: APIError = {
+        const error = {
           error: 'INVALID_INPUT', 
           message: 'Available roles array is required and must not be empty'
         };
@@ -33,7 +29,7 @@ export class RoleController {
 
       const validationError = this.validateInput({ members, availableRoles });
       if (validationError) {
-        const error: APIError = {
+        const error = {
           error: 'VALIDATION_ERROR',
           message: validationError
         };
@@ -47,7 +43,7 @@ export class RoleController {
     } catch (error) {
       console.error('Role assignment error:', error);
       
-      const apiError: APIError = {
+      const apiError = {
         error: 'INTERNAL_ERROR',
         message: error instanceof Error ? error.message : 'An unexpected error occurred',
         code: 500
@@ -57,7 +53,7 @@ export class RoleController {
     }
   }
 
-  private validateInput({ members, availableRoles }: TeamRoleAssignmentRequest): string | null {
+  validateInput({ members, availableRoles }) {
     for (const member of members) {
       if (!member.id || !member.name) {
         return 'Each member must have an id and name';
@@ -94,7 +90,7 @@ export class RoleController {
     return null;
   }
 
-  async healthCheck(req: Request, res: Response): Promise<void> {
+  async healthCheck(req, res) {
     try {
       res.status(200).json({
         status: 'healthy',

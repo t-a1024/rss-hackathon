@@ -1,12 +1,6 @@
 import React, { useState } from 'react';
-import type { TeamMember } from '../types/api';
 
-interface MemberFormProps {
-  onAddMember: (member: TeamMember) => void;
-  members: TeamMember[];
-}
-
-export const MemberForm: React.FC<MemberFormProps> = ({ onAddMember, members }) => {
+export const MemberForm = ({ onAddMember, members }) => {
   const [formData, setFormData] = useState({
     name: '',
     birthday: '',
@@ -16,7 +10,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({ onAddMember, members }) 
     motivation: ''
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     
     if (!formData.name || !formData.birthday || !formData.age || !formData.hometown || !formData.organization || !formData.motivation) {
@@ -24,7 +18,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({ onAddMember, members }) 
       return;
     }
 
-    const newMember: TeamMember = {
+    const newMember = {
       id: `member-${Date.now()}`,
       name: formData.name,
       birthday: formData.birthday,
@@ -45,7 +39,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({ onAddMember, members }) 
     });
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value

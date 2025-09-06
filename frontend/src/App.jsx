@@ -1,5 +1,5 @@
 import './App.css'
-import { RoleAssignmentTest } from './components/RoleAssignmentTest'
+import { RoleAssignmentTest } from './components/RoleAssignmentTest.jsx'
 
 function App() {
   return (

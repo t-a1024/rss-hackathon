@@ -1,11 +1,12 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import { TeamMember, Role, RoleAssignment, TeamRoleAssignmentResponse } from '../types/index.js';
 
 export class AIService {
-  private genAI: GoogleGenerativeAI | null = null;
-  private model: any = null;
+  constructor() {
+    this.genAI = null;
+    this.model = null;
+  }
 
-  private initializeAI() {
+  initializeAI() {
     if (this.genAI) return;
     
     const apiKey = process.env.GEMINI_API_KEY;
@@ -17,12 +18,12 @@ export class AIService {
     this.model = this.genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
   }
 
-  async assignRoles(members: TeamMember[], roles: Role[]): Promise<TeamRoleAssignmentResponse> {
+  async assignRoles(members, roles) {
     this.initializeAI();
     const prompt = this.createRoleAssignmentPrompt(members, roles);
     
     try {
-      const result = await this.model!.generateContent(prompt);
+      const result = await this.model.generateContent(prompt);
       const response = await result.response;
       const text = response.text();
       
@@ -33,7 +34,7 @@ export class AIService {
     }
   }
 
-  private createRoleAssignmentPrompt(members: TeamMember[], roles: Role[]): string {
+  createRoleAssignmentPrompt(members, roles) {
     const membersText = members.map(member => `
 Name: ${member.name}
 Birthday: ${member.birthday}
@@ -93,12 +94,12 @@ ${rolesText}
     `;
   }
 
-  private parseAIResponse(text: string, members: TeamMember[], roles: Role[]): TeamRoleAssignmentResponse {
+  parseAIResponse(text, members, roles) {
     try {
       const cleanedText = text.replace(/```json\n?|\n?```/g, '').trim();
       const parsed = JSON.parse(cleanedText);
       
-      const assignments: RoleAssignment[] = parsed.assignments.map((assignment: any) => ({
+      const assignments = parsed.assignments.map((assignment) => ({
         memberId: assignment.memberId,
         memberName: assignment.memberName,
         roleId: assignment.roleId,
@@ -118,8 +119,8 @@ ${rolesText}
     }
   }
 
-  private generateFallbackResponse(members: TeamMember[], roles: Role[]): TeamRoleAssignmentResponse {
-    const assignments: RoleAssignment[] = members.map((member, index) => {
+  generateFallbackResponse(members, roles) {
+    const assignments = members.map((member, index) => {
       const role = roles[index % roles.length];
       return {
         memberId: member.id,

@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { apiClient } from '../api/roleApi';
-import { MemberForm } from './MemberForm';
-import type { TeamMember, Role, TeamRoleAssignmentResponse } from '../types/api';
+import { MemberForm } from './MemberForm.jsx';
 
-const availableRoles: Role[] = [
+const availableRoles = [
   {
     id: 'pioneer',
     title: '開拓者',
@@ -48,12 +47,12 @@ const availableRoles: Role[] = [
   }
 ];
 
-export const RoleAssignmentTest: React.FC = () => {
+export const RoleAssignmentTest = () => {
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<TeamRoleAssignmentResponse | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [healthStatus, setHealthStatus] = useState<string | null>(null);
-  const [members, setMembers] = useState<TeamMember[]>([]);
+  const [result, setResult] = useState(null);
+  const [error, setError] = useState(null);
+  const [healthStatus, setHealthStatus] = useState(null);
+  const [members, setMembers] = useState([]);
 
   const handleHealthCheck = async () => {
     try {
@@ -65,7 +64,7 @@ export const RoleAssignmentTest: React.FC = () => {
     }
   };
 
-  const handleAddMember = (member: TeamMember) => {
+  const handleAddMember = (member) => {
     setMembers(prev => [...prev, member]);
   };
 
