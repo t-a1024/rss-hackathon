@@ -2,7 +2,8 @@
 
 @font-face {
   font-family: "KaiseiOpti-Bold.ttf";
-  src: url("../src/fonts/KaiseiOpti-Bold.ttf") format("woff2");
+  src: url("myfont.woff2") format("woff2"),
+  url("myfont.ttf") format("truetype");
 }
 
 .pop {
