@@ -1,13 +1,22 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import "./OneLineInputField.css";
 
 type OneLineInputFieldProps={
     placeholder:string, 
-    setText:(text:string)=>void
+    setText:(text:string)=>void,
+    value?:string
 };
 
-export default function OneLineInputField( {placeholder, setText} : OneLineInputFieldProps){
-    const [content, setContent] = useState<string>("");
+export default function OneLineInputField( {placeholder, setText, value} : OneLineInputFieldProps){
+    const [content, setContent] = useState<string>(value || "");
+    
+    // propsのvalueが変更された場合は内部stateを更新
+    React.useEffect(() => {
+        if (value !== undefined) {
+            setContent(value);
+        }
+    }, [value]);
+    
     const handleChange = ( evt:React.ChangeEvent<HTMLInputElement> )=>{
         evt.stopPropagation();
         evt.target.value ? setContent(evt.target.value) : setContent("");
