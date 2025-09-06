@@ -12,8 +12,8 @@ export default function TextInputField({ setText, rows, cols, placeholder } :Tex
     const [content, setContent] = useState<string>("");
     const handleChange = ( evt:React.ChangeEvent<HTMLTextAreaElement> )=>{
         evt.stopPropagation();
-        evt.target.value && setContent(evt.target.value);
-        evt.target.value && setText(evt.target.value);
+        evt.target.value ? setContent(evt.target.value) : setText("");
+        evt.target.value ? setText(evt.target.value) : setText("");
     }
     
     return (
