@@ -40,7 +40,6 @@ const answers = new Map();
 const results = new Map();
 
 /** デフォルトの質問リスト */
-// TODO: 問題の調整
 const defaultQuestions = [
   {
     questionId: "q1",
@@ -61,8 +60,49 @@ const defaultQuestions = [
   {
     questionId: "q5",
     question: "理想のチームとは？"
+  },
+  {
+    questionId: "q6",
+    question: "子どもの頃の夢は？"
+  },
+  {
+    questionId: "q7",
+    question: "最近ハマっていることは？"
+  },
+  {
+    questionId: "q8",
+    question: "人生で一番影響を受けた人は？"
+  },
+  {
+    questionId: "q9",
+    question: "旅行してみたい場所は？"
+  },
+  {
+    questionId: "q10",
+    question: "好きな本や漫画は？"
+  },
+  {
+    questionId: "q11",
+    question: "尊敬する人物は？"
+  },
+  {
+    questionId: "q12",
+    question: "ストレス解消法は？"
+  },
+  {
+    questionId: "q13",
+    question: "好きな食べ物は？"
+  },
+  {
+    questionId: "q14",
+    question: "挑戦してみたいことは？"
+  },
+  {
+    questionId: "q15",
+    question: "仕事や勉強で大切にしていることは？"
   }
 ];
+
 
 // ユーティリティ関数
 /** 部屋idの生成 */
@@ -170,7 +210,7 @@ app.post('/rooms', (req, res) => {
     }
 
     const roomId = generateId();
-    const selectedQuestions = selectRandomQuestions(defaultQuestions, 1); // TODO: 問題数の調整
+    const selectedQuestions = selectRandomQuestions(defaultQuestions, 4);
     
     const room = {
       id: roomId,
@@ -368,9 +408,7 @@ app.get('/rooms/:id/results', (req, res) => {
       const remainingParticipants = room.capacity - currentAnswers.length;
       let message;
       
-      if (remainingParticipants === 1) {
-        message = '残り一人です。';
-      } else if (remainingParticipants > 1) {
+      if (remainingParticipants > 0) {
         message = `残り${remainingParticipants}人です。`;
       } else {
         message = '結果を生成中です。';
