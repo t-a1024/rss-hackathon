@@ -4,18 +4,16 @@ import Text from "../components/Text/text";
 import TextInputField from "../components/TextInputField/TextInputField";
 import Heading from "../components/Heading/Heading";
 import Button from "../components/Button/Button";
-
-// 追加：カレンダーUI
+import OneLineInputField from "../components/OneLineInputField/OneLineInputField";
 import { BirthdateDatePicker, type Birthdate } from "../components/IntegerInputField/IntegerInputField";
 
-// 補助: 表示用に YYYY-MM-DD へ整形
+// 補助: 表示用 YYYY-MM-DD
 const pad2 = (n: number) => (n < 10 ? `0${n}` : String(n));
 const formatBirthdate = (b: Birthdate) =>
   b && b.year && b.month && b.day ? `${b.year}-${pad2(b.month)}-${pad2(b.day)}` : "";
 
 export default function BaseInfo() {
   const [name, setName] = useState("");
-  // 変更：文字列ではなく Birthdate オブジェクトで管理
   const [birthdate, setBirthdate] = useState<Birthdate>({ year: null, month: null, day: null });
   const [age, setAge] = useState("");
   const [origin, setOrigin] = useState("");
@@ -24,7 +22,7 @@ export default function BaseInfo() {
 
   const allFilled = useMemo(
     () => name && formatBirthdate(birthdate) && age && origin && affiliation && motivation,
-    [name, birthdate, age, origin, affiliation, motivation],
+    [name, birthdate, age, origin, affiliation, motivation]
   );
 
   const handleSubmit = () => {
@@ -47,19 +45,18 @@ export default function BaseInfo() {
           基本情報の入力
         </Heading>
 
-        <div className="grid grid-cols-1 gap-6">
-          {/* 名前 */}
-          <div className="space-y-2">
-            <Text as="label" size="sm" weight="semibold" tone="secondary" htmlFor="name">
+        <div>
+          {/* 名前（1行入力） */}
+          <div className="space-y-2 flex justify-between">
+            <Text as="label" size="sm" weight="semibold" tone="secondary">
               名前
             </Text>
-            {/* ↓ rows=1 のテキストエリアだと潰れやすいので className で高さ/幅を確保（後述のCSSと併用） */}
-            <TextInputField id="name" name="name" rows={1} cols={40} placeholder="山田 太郎" setText={setName} />
+            <OneLineInputField placeholder="山田 太郎" setText={setName} />
           </div>
 
-          {/* 誕生日：カレンダーUIに変更 */}
-          <div className="space-y-2">
-            <Text as="label" size="sm" weight="semibold" tone="secondary" htmlFor="birthday">
+          {/* 誕生日（カレンダーUI） */}
+          <div className="space-y-2 flex justify-between">
+            <Text as="label" size="sm" weight="semibold" tone="secondary">
               誕生日
             </Text>
             <BirthdateDatePicker
@@ -71,45 +68,36 @@ export default function BaseInfo() {
             />
           </div>
 
-          {/* 年齢 */}
-          <div className="space-y-2">
-            <Text as="label" size="sm" weight="semibold" tone="secondary" htmlFor="age">
+          {/* 年齢（1行入力） */}
+          <div className="space-y-2 flex justify-between">
+            <Text as="label" size="sm" weight="semibold" tone="secondary">
               年齢
             </Text>
-            <TextInputField id="age" name="age" rows={1} cols={20} placeholder="20" setText={setAge} />
+            <OneLineInputField placeholder="20" setText={setAge} />
           </div>
 
-          {/* 出身 */}
-          <div className="space-y-2">
-            <Text as="label" size="sm" weight="semibold" tone="secondary" htmlFor="origin">
+          {/* 出身（1行入力） */}
+          <div className="space-y-2 flex justify-between">
+            <Text as="label" size="sm" weight="semibold" tone="secondary">
               出身
             </Text>
-            <TextInputField id="origin" name="origin" rows={1} cols={40} placeholder="東京都千代田区" setText={setOrigin} />
+            <OneLineInputField placeholder="東京都千代田区" setText={setOrigin} />
           </div>
 
-          {/* 所属 */}
-          <div className="space-y-2">
-            <Text as="label" size="sm" weight="semibold" tone="secondary" htmlFor="affiliation">
+          {/* 所属（1行入力） */}
+          <div className="space-y-2 flex justify-between">
+            <Text as="label" size="sm" weight="semibold" tone="secondary">
               所属
             </Text>
-            <TextInputField
-              id="affiliation"
-              name="affiliation"
-              rows={1}
-              cols={40}
-              placeholder="◯◯大学 △△学部 / ◯◯株式会社"
-              setText={setAffiliation}
-            />
+            <OneLineInputField placeholder="◯◯大学 △△学部 / ◯◯株式会社" setText={setAffiliation} />
           </div>
 
-          {/* 意気込み（複数行のまま） */}
+          {/* 意気込み（複数行） */}
           <div className="space-y-2">
-            <Text as="label" size="sm" weight="semibold" tone="secondary" htmlFor="motivation">
+            <Text as="label" size="sm" weight="semibold" tone="secondary">
               意気込み
             </Text>
             <TextInputField
-              id="motivation"
-              name="motivation"
               rows={4}
               cols={60}
               placeholder="めちゃくちゃ頑張る"

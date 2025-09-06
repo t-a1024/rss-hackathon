@@ -12,7 +12,7 @@ const router = createBrowserRouter([
     element: <App />,       
     children: [
       { index: true, element: <Home /> },           
-      { path: "base-info", element: <BaseInfo /> },        
+      { path: "rooms/:roomId", element: <BaseInfo /> },        
       { path: "*", element: <div>Not Found</div> }, 
     ],
   },
