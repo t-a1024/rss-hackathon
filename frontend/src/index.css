@@ -24,7 +24,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
+/* 
 a {
   font-weight: 500;
   color: #646cff;
@@ -63,6 +63,7 @@ h1 {
   0%   { opacity: 0; transform: translateY(20px); }
   100% { opacity: 1; transform: translateY(0); }
 }
+
 .animate-slide-up-fade {
   animation: slide-up-fade 600ms ease-out both;
 }

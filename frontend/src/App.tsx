@@ -1,9 +1,7 @@
 import { Link, Outlet } from "react-router-dom";
 import "./util.css";
 import { ToastContainer } from 'react-toastify';
-
 import 'react-toastify/dist/ReactToastify.css';
-
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import BaseInfo from "./pages/BaseInfo";
