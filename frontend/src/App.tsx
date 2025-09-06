@@ -1,4 +1,3 @@
-import { Link, Outlet } from "react-router-dom";
 import "./util.css";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -14,7 +13,7 @@ export default function App() {
       <main className="relative z-10 min-h-screen overflow-hidden p-6">
         <ToastContainer
         position="top-center"
-        autoClose={5000}
+        autoClose={7000}
         closeOnClick
         pauseOnHover
         draggable

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Heading from "./../../components/Heading/Heading.tsx";
 import Button from "./../../components/Button/Button.tsx";
 import QuestionContainer from "./../../components/QuestionContainer/QuestionContainer.tsx";
-import type {GetJSON, PostJSON, Question, Answer} from "./../../util.ts";
+import type {GetJSON, PostJSON, Question, Answer, BaseInformation} from "./../../util.ts";
 import {getAPI, postAPI} from "./../../util.ts";
 import { useParams } from "react-router-dom";
 import "./QnA.css";
@@ -41,12 +41,17 @@ export default function QnA(){
                 console.log(err);
             }
         };
-        // 基本情報の読み込み
-        // JSON.parse(localStorage);
-
         fetchData(); // ここで関数を呼ぶ
     }, []);
-    
+
+    // 基本情報設定
+    const tmp:BaseInformation = JSON.parse(localStorage.baseInfo);
+    postData.name = tmp.name;
+    postData.age = tmp.age;
+    postData.birthdate = tmp.birthdate;
+    postData.aspiration = tmp.aspiration;
+    postData.hometown = tmp.hometown;
+
     const [post,setPost] = useState<PostJSON>(postData);
 
     const setAnswer = ( questionId:string, value:string )=>{

@@ -24,6 +24,15 @@ type PostJSON = {
     answers:Answer[]
 };
 
+type BaseInformation = {
+    name: string,
+    birthdate: string,
+    age: number, 
+    hometown: string,
+    affiliation: string,
+    aspiration: string,
+}
+
 const apiUrl = import.meta.env.VITE_API_URL;
 
 export const getAPI = async (url:string) => {
@@ -42,4 +51,4 @@ export const postAPI = async (url:string,data:JSON) => {
     return response.json();
 }
 
-export type {Question, Answer, GetJSON, PostJSON};
+export type {Question, Answer, GetJSON, PostJSON, BaseInformation};
