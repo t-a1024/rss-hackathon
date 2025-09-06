@@ -11,6 +11,7 @@ type ProfileProps = {
         age: number | string;
         enthusiasm: string;
         birthplace: string;
+        affiliation: string;
         description: string;
         suitability: string;
     };
