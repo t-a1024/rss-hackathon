@@ -1,11 +1,11 @@
 // src/pages/BaseInfo.tsx
 import  {  useState } from "react";
+import { toast } from "react-toastify"; 
 import Text from "../components/Text/text";
 import Heading from "../components/Heading/Heading";
 import OneLineInputField from "../components/OneLineInputField/OneLineInputField";
 import { BirthdateDatePicker, type Birthdate } from "../components/IntegerInputField/IntegerInputField";
 
-// 補助: 表示用 YYYY-MM-DD
 const pad2 = (n: number) => (n < 10 ? `0${n}` : String(n));
 const formatBirthdate = (b: Birthdate) =>
   b && b.year && b.month && b.day ? `${b.year}-${pad2(b.month)}-${pad2(b.day)}` : "";
@@ -21,28 +21,55 @@ export default function BaseInfo() {
 
 
   const handleSubmit = () => {
-    // 日付を YYYY-MM-DD 文字列へ
+    const msgs: string[] = [];
+  
     const birthStr = formatBirthdate(birthdate);
   
-    // 年齢は数値に（不正なら null）
     const ageNum = Number.parseInt(age, 10);
-    const ageValue = Number.isFinite(ageNum) ? ageNum : null;
+    const ageValid = Number.isInteger(ageNum) && ageNum > 0;
+  
+    if (!name.trim()) msgs.push("名前を入力してください。");
+    if (!birthStr) msgs.push("誕生日を選択してください。");
+    if (!age.trim()) {
+      msgs.push("年齢を入力してください。");
+    } else if (!ageValid) {
+      msgs.push("年齢は正の整数で入力してください。");
+    }
+    if (!origin.trim()) msgs.push("出身を入力してください。");
+    if (!affiliation.trim()) msgs.push("所属を入力してください。");
+    if (!motivation.trim()) msgs.push("意気込みを入力してください。");
+  
+    if (msgs.length > 0) {
+      // 失敗トースト（リスト表示）
+      toast.error(
+        <div>
+          入力内容を確認してください。
+          <ul className="mt-1 list-disc list-inside">
+            {msgs.map((m, i) => (
+              <li key={i}>{m}</li>
+            ))}
+          </ul>
+        </div>,
+        { autoClose: 5000 }
+      );
+      return;
+    }
   
     const payload = {
       name: name.trim(),
-      birthdate: birthStr,          
-      age: ageValue,                     
-      hometown: origin.trim(),           
-      affiliation: affiliation.trim(),        
-      aspiration: motivation.trim(),         
+      birthdate: birthStr,
+      age: ageNum,
+      hometown: origin.trim(),
+      affiliation: affiliation.trim(),
+      aspiration: motivation.trim(),
     };
   
     try {
       localStorage.setItem("baseInfo", JSON.stringify(payload));
-      alert("ローカルに保存しました！\n" + JSON.stringify(payload, null, 2));
+      toast.success("ローカルに保存しました！", { autoClose: 2500 });
     } catch (e) {
       console.error(e);
-      alert("保存に失敗しました。ストレージの容量や設定を確認してください。");
+      toast.error("保存に失敗しました。ストレージ設定を確認してください。");
     }
   };
 
