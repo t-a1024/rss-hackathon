@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { RoomTestApp } from './components/ai-test2';
 // import { AITestApp } from './components/ai-test';
 
 
@@ -16,13 +17,14 @@ function App() {
       .catch(error => console.error('Error fetching data:', error));
   }, []);
 
-  return (
-    <div>
-      <h1>React App</h1>
-      {data ? <p>Data from API: {data}</p> : <p>Loading...</p>}
-    </div>
-  );
+  // return (
+  //   <div>
+  //     <h1>React App</h1>
+  //     {data ? <p>Data from API: {data}</p> : <p>Loading...</p>}
+  //   </div>
+  // );
   // return <AITestApp />;
+  return <RoomTestApp />;
 }
 
 export default App;
