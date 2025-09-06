@@ -9,7 +9,7 @@ import { Copy } from "lucide-react";
 const API_BASE = import.meta.env.VITE_API_URL?.replace(/\/$/, "") || "/api";
 
 export default function Home() {
-  const [count, setCount] = useState<number | null>(2);        // ← 既定を2に（最小に合わせる）
+  const [count, setCount] = useState<number | null>(1);   
   const [loading, setLoading] = useState(false);
 
   const handleNext = async () => {
@@ -24,11 +24,9 @@ export default function Home() {
       const res = await fetch(`${API_BASE}/rooms`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        // ★ participants ではなく capacity を送る
         body: JSON.stringify({ capacity: count }),
       });
 
-      // エラー時はサーバーのJSON/テキストを拾って表示
       if (!res.ok) {
         const raw = await res.text();
         let err: any;
