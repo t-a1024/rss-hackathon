@@ -1,17 +1,9 @@
-import { useEffect, useState } from 'react';
-import Home from "./pages/Home";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-function App() {
-  return (
-    <>
-    <main>
-      {/* 中央寄せ用のラッパ。スマホは上詰め、md以降は縦中央 */}
-      <Home />
-      <ToastContainer position="top-center" autoClose={4000} />
-    </main>
-    </>
-  )
-}
+import { Link, Outlet } from "react-router-dom";
 
-export default App;
+export default function App() {
+  return (
+    <main className="p-6">
+      <Outlet />
+    </main>
+  );
+}
