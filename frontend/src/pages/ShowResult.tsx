@@ -4,7 +4,7 @@ import { useLocation, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import Heading from "../components/Heading/Heading";
 import type { CompletedPayload, ProcessingPayload } from "../types/result";
-import Result from "./result"; // ← 実際の配置に合わせて
+import Result from "../components/Result/Result"; 
 
 const API_BASE = import.meta.env.VITE_API_URL?.replace(/\/$/, "") || "/api";
 const NO_IMAGE = "/noimage.png";
@@ -45,10 +45,8 @@ export default function ShowResult() {
   const [completed, setCompleted] = useState<CompletedPayload | null>(null);
   const [processing, setProcessing] = useState<ProcessingPayload | null>(null);
 
-  // ▼ 追加：現在表示中のインデックス
   const [idx, setIdx] = useState(0);
 
-  // 取得のたびに先頭から
   useEffect(() => {
     setIdx(0);
   }, [completed?.results?.length]);
@@ -111,7 +109,6 @@ export default function ShowResult() {
     }
   };
 
-  // ▼ 追加：前後に移動（循環）
   const goPrev = useCallback(() => {
     if (!completed) return;
     const n = completed.results.length;
@@ -126,7 +123,6 @@ export default function ShowResult() {
     setIdx((i) => (i + 1) % n);
   }, [completed]);
 
-  // ▼ 追加：キーボード操作（← / →）
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (!completed || completed.results.length <= 1) return;
