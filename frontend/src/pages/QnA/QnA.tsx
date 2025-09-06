@@ -2,23 +2,17 @@ import { useState, useEffect } from "react";
 import Heading from "./../../components/Heading/Heading.tsx";
 import Button from "./../../components/Button/Button.tsx";
 import QuestionContainer from "./../../components/QuestionContainer/QuestionContainer.tsx";
-import type {GetJSON, PostJSON, Question, Answer} from "./../../util.ts";
+import type {GetJSON, PostJSON, Question, Answer, BaseInformation} from "./../../util.ts";
+import {getAPI, postAPI} from "./../../util.ts";
+import { useParams } from "react-router-dom";
 import "./QnA.css";
 
-const dummyData:GetJSON = {
-  "id": "room123",
-  "capacity": 4,
-  "questions": [
-      {
-          "questionId": "q1",
-          "question": "好きな歌は？"
-      },
-      {
-        "questionId": "q3",
-          "question": "好きなゲームは？"
+const dummyData:Array<Question> = [
+        {
+            questionId:"",
+            question:""
         }
-  ]
-};
+    ];
 
 const postData:PostJSON = {
   "name": "Taro Yamada",
@@ -27,28 +21,37 @@ const postData:PostJSON = {
   "hometown": "Osaka, Japan",
   "affiliation": "Example Inc.",
   "aspiration": "I'm excited for this new challenge and will do my best to contribute to the team!",
-	"answers": [
-    {
-      "questionId": "q1",
-      "value": "hogehoge"
-    },
-    {
-      "questionId": "q3",
-      "value": "tekitou"
-    }
-  ]
+  "answers": []
 }
 
 export default function QnA(){
+    const { roomId } = useParams(); // フックはトップレベルで使う方が安全
     // 初回レンダリング時だけ行う処理
-    useEffect(
-        ()=>{
-            // GetJSON型データをリクエストする所
-        } ,
-        []
-    );
+    const [questions,setQuestions] = useState<Array<Question>>(dummyData);
+    useEffect(() => {
+        const fetchData = async () => {
+            console.log("useEffect!");
 
-    const questions:Array<Question> = dummyData.questions;
+            try {
+                console.log(roomId);
+                const json: GetJSON = await getAPI(`rooms/${roomId}`);
+                setQuestions(json.questions);
+                console.log(json);
+            } catch (err) {
+                console.log(err);
+            }
+        };
+        fetchData(); // ここで関数を呼ぶ
+    }, []);
+
+    // 基本情報設定
+    const tmp:BaseInformation = JSON.parse(localStorage.baseInfo);
+    postData.name = tmp.name;
+    postData.age = tmp.age;
+    postData.birthdate = tmp.birthdate;
+    postData.aspiration = tmp.aspiration;
+    postData.hometown = tmp.hometown;
+
     const [post,setPost] = useState<PostJSON>(postData);
 
     const setAnswer = ( questionId:string, value:string )=>{
@@ -57,6 +60,7 @@ export default function QnA(){
                 const nxt = { ...prev };
                 const tmp :Answer|undefined = nxt.answers.find( answer => answer.questionId === questionId );
                 if(tmp)tmp.value = value;
+                else nxt.answers.push({questionId, value});
                 return nxt;
             }
         );
@@ -64,6 +68,17 @@ export default function QnA(){
 
     const handleClick = ()=>{
         // POST する処理を書く
+        const postData = async(data:JSON) =>{
+            try{
+                const json = await postAPI(`rooms/${roomId}/answers`,data);
+                console.log(json);
+            }catch(err){
+                console.log(err);
+            }
+        };
+        const jsonStr = JSON.stringify(post);
+        const obj:JSON = JSON.parse(jsonStr);
+        postData(obj);
         console.log(post);
     };
 
