@@ -4,7 +4,8 @@ import Button from "./../../components/Button/Button.tsx";
 import QuestionContainer from "./../../components/QuestionContainer/QuestionContainer.tsx";
 import type {GetJSON, PostJSON, Question, Answer, BaseInformation} from "./../../util.ts";
 import {getAPI, postAPI} from "./../../util.ts";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import "./QnA.css";
 
 const dummyData:Array<Question> = [
@@ -25,7 +26,9 @@ const postData:PostJSON = {
 }
 
 export default function QnA(){
-    const { roomId } = useParams();
+    const { roomId } = useParams(); // フックはトップレベルで使う方が安全
+    const navigate = useNavigate();
+    // 初回レンダリング時だけ行う処理
     const [questions,setQuestions] = useState<Array<Question>>(dummyData);
     useEffect(() => {
         const fetchData = async () => {
@@ -40,9 +43,10 @@ export default function QnA(){
                 console.log(err);
             }
         };
-        fetchData(); 
+        fetchData(); // ここで関数を呼ぶ
     }, []);
 
+    // 基本情報設定
     const tmp:BaseInformation = JSON.parse(localStorage.baseInfo);
     postData.name = tmp.name;
     postData.age = tmp.age;
@@ -78,6 +82,8 @@ export default function QnA(){
         const obj:JSON = JSON.parse(jsonStr);
         postData(obj);
         console.log(post);
+        if (roomId)navigate(`/rooms/${roomId}/results`);
+        else toast.error("URL から roomId を取得できませんでした。");
     };
 
     return(
