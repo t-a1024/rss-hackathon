@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+// import { AITestApp } from './components/ai-test';
+
 
 function App() {
   const [data, setData] = useState<string>("");
@@ -20,6 +22,7 @@ function App() {
       {data ? <p>Data from API: {data}</p> : <p>Loading...</p>}
     </div>
   );
+  // return <AITestApp />;
 }
 
 export default App;
