@@ -2,7 +2,6 @@
 import { useState } from "react";
 import Heading from "../components/Heading/Heading";
 import { IntegerStepperField } from "../components/IntegerInputField/IntegerInputField";
-import Button from "../components/Button/Button";
 import BG from "../Image/First.png";
 import BackgroundImage from "../Image/card_background.jpg";
 import { toast } from "react-toastify";
@@ -69,6 +68,7 @@ export default function Home() {
   };
 
   return (
+    <>
     <main
       className="min-h-screen flex flex-col items-center justify-center p-4 animate-slide-up-fade pop bg-cover bg-center"
       style={{ backgroundImage: `url(${BG})` }}
@@ -135,5 +135,6 @@ export default function Home() {
         </section>
       </div>
     </main>
+    </>
   );
 }
