@@ -9,7 +9,7 @@ import { Copy } from "lucide-react";
 const API_BASE = import.meta.env.VITE_API_URL?.replace(/\/$/, "") || "/api";
 
 export default function Home() {
-  const [count, setCount] = useState<number | null>(1);   
+  const [count, setCount] = useState<number | null>(2);   
   const [loading, setLoading] = useState(false);
 
   const handleNext = async () => {
@@ -83,11 +83,11 @@ export default function Home() {
             name="participantsCount"
             value={count}
             onChange={setCount}
-            min={1}          
+            min={2}          
             max={10}
             step={1}
             size="md"
-            placeholder="1"
+            placeholder="2"
           />
         </div>
 
