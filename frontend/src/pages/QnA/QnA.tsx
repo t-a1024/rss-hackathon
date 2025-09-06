@@ -78,9 +78,24 @@ export default function QnA(){
                 console.log(json);
             }catch(err){
                 console.log(err);
-                toast.error("質問の回答の送信に失敗しました．");
+                toast.error("質問の回答の送信に失敗しました。");
             }
         };
+        // すべてに回答してもらうバリデーションの実装
+        let isCompleted = true;
+        for(let answer of post.answers){
+            if(!answer.value){
+                isCompleted = false;
+                break;
+            }
+        }
+        if(
+            !isCompleted ||
+            post.answers.length === 0
+        ){
+            toast.error("全ての質問に回答してください。");
+            return ;
+        }
         const jsonStr = JSON.stringify(post);
         const obj:JSON = JSON.parse(jsonStr);
         postData(obj);
