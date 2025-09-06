@@ -24,16 +24,29 @@ export default function BaseInfo() {
   );
 
   const handleSubmit = () => {
+    // 日付を YYYY-MM-DD 文字列へ
+    const birthStr = formatBirthdate(birthdate);
+  
+    // 年齢は数値に（不正なら null）
+    const ageNum = Number.parseInt(age, 10);
+    const ageValue = Number.isFinite(ageNum) ? ageNum : null;
+  
     const payload = {
-      name,
-      birthday: formatBirthdate(birthdate),
-      age,
-      origin,
-      affiliation,
-      motivation,
+      name: name.trim(),
+      birthdate: birthStr,          
+      age: ageValue,                     
+      hometown: origin.trim(),           
+      affiliation: affiliation.trim(),        
+      aspiration: motivation.trim(),         
     };
-    console.log("submit:", payload);
-    alert("送信しました！\n" + JSON.stringify(payload, null, 2));
+  
+    try {
+      localStorage.setItem("baseInfo", JSON.stringify(payload));
+      alert("ローカルに保存しました！\n" + JSON.stringify(payload, null, 2));
+    } catch (e) {
+      console.error(e);
+      alert("保存に失敗しました。ストレージの容量や設定を確認してください。");
+    }
   };
 
   return (
@@ -123,7 +136,7 @@ export default function BaseInfo() {
             type="button"
             onClick={handleSubmit}
             className="inline-flex items-center justify-center rounded-full px-5 py-3 font-semibold
-             !bg-blue-500 text-gray-900 hover:!bg-blue-600 active:translate-y-px transition"
+             bg-[#ccc] text-gray-900 hover:bg-gray-600 active:translate-y-px transition"
           >
             完了
           </button>
