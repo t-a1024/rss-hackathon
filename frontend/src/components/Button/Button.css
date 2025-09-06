@@ -1,0 +1,10 @@
+.Button{
+    background-color:#ccc;
+    color:#000;
+    transition:all 0.5s ease-in-out;
+}
+
+.Button:hover{
+    box-shadow:0rem 0.5rem 3rem 0.5rem #cc0;
+    transform:scale(1.1) translate(0rem,-1rem);
+}
