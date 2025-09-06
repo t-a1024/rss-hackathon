@@ -4,7 +4,8 @@ import { useLocation, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import Heading from "../components/Heading/Heading";
 import type { CompletedPayload, ProcessingPayload } from "../types/result";
-import Result from "../components/Result/Result"; 
+import Result from "../components/Result/Result";
+import BG from "../Image/Finally.png";
 
 const API_BASE = import.meta.env.VITE_API_URL?.replace(/\/$/, "") || "/api";
 const NO_IMAGE = "/noimage.png";
@@ -134,7 +135,10 @@ export default function ShowResult() {
   }, [completed, goPrev, goNext]);
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-6">
+    <main
+      className="min-h-screen flex flex-col items-center justify-center p-6 bg-no-repeat bg-center" // bg-cover を bg-contain に変更
+      style={{ backgroundImage: `url(${BG})` }}
+    >
       <section className="w-full max-w-3xl space-y-8">
         <Heading as="h1" size="xl" weight="bold" align="center">
           結果を見る

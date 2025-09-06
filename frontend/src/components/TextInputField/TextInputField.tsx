@@ -3,11 +3,11 @@ import "./TextInputField.css";
 
 type TextInputFieldProps={
     setText:( text:string )=>void, 
-    cols:number, 
-    placeholder:string
+    placeholder:string,
+    className?:string
 };
 
-export default function TextInputField({ setText, cols, placeholder } :TextInputFieldProps){
+export default function TextInputField({ className, setText, placeholder } :TextInputFieldProps){
     const [content, setContent] = useState<string>("");
     const handleChange = ( evt:React.ChangeEvent<HTMLTextAreaElement> )=>{
         evt.stopPropagation();
@@ -17,8 +17,7 @@ export default function TextInputField({ setText, cols, placeholder } :TextInput
     
     return (
         <textarea 
-        className="TextInputField" 
-        cols={cols} 
+        className={className+" TextInputField"} 
         placeholder={placeholder} 
         value={content} 
         onChange={handleChange}
