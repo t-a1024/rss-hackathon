@@ -1,11 +1,11 @@
 // src/pages/BaseInfo.tsx
-import React, { useMemo, useState } from "react";
+import  {  useState } from "react";
+import { toast } from "react-toastify"; 
 import Text from "../components/Text/text";
 import Heading from "../components/Heading/Heading";
 import OneLineInputField from "../components/OneLineInputField/OneLineInputField";
 import { BirthdateDatePicker, type Birthdate } from "../components/IntegerInputField/IntegerInputField";
 
-// 補助: 表示用 YYYY-MM-DD
 const pad2 = (n: number) => (n < 10 ? `0${n}` : String(n));
 const formatBirthdate = (b: Birthdate) =>
   b && b.year && b.month && b.day ? `${b.year}-${pad2(b.month)}-${pad2(b.day)}` : "";
@@ -18,22 +18,59 @@ export default function BaseInfo() {
   const [affiliation, setAffiliation] = useState("");
   const [motivation, setMotivation] = useState("");
 
-  const allFilled = useMemo(
-    () => name && formatBirthdate(birthdate) && age && origin && affiliation && motivation,
-    [name, birthdate, age, origin, affiliation, motivation]
-  );
+
 
   const handleSubmit = () => {
+    const msgs: string[] = [];
+  
+    const birthStr = formatBirthdate(birthdate);
+  
+    const ageNum = Number.parseInt(age, 10);
+    const ageValid = Number.isInteger(ageNum) && ageNum > 0;
+  
+    if (!name.trim()) msgs.push("名前を入力してください。");
+    if (!birthStr) msgs.push("誕生日を選択してください。");
+    if (!age.trim()) {
+      msgs.push("年齢を入力してください。");
+    } else if (!ageValid) {
+      msgs.push("年齢は正の整数で入力してください。");
+    }
+    if (!origin.trim()) msgs.push("出身を入力してください。");
+    if (!affiliation.trim()) msgs.push("所属を入力してください。");
+    if (!motivation.trim()) msgs.push("意気込みを入力してください。");
+  
+    if (msgs.length > 0) {
+      // 失敗トースト（リスト表示）
+      toast.error(
+        <div>
+          入力内容を確認してください。
+          <ul className="mt-1 list-disc list-inside">
+            {msgs.map((m, i) => (
+              <li key={i}>{m}</li>
+            ))}
+          </ul>
+        </div>,
+        { autoClose: 5000 }
+      );
+      return;
+    }
+  
     const payload = {
-      name,
-      birthday: formatBirthdate(birthdate),
-      age,
-      origin,
-      affiliation,
-      motivation,
+      name: name.trim(),
+      birthdate: birthStr,
+      age: ageNum,
+      hometown: origin.trim(),
+      affiliation: affiliation.trim(),
+      aspiration: motivation.trim(),
     };
-    console.log("submit:", payload);
-    alert("送信しました！\n" + JSON.stringify(payload, null, 2));
+  
+    try {
+      localStorage.setItem("baseInfo", JSON.stringify(payload));
+      toast.success("保存しました！", { autoClose: 2500 });
+    } catch (e) {
+      console.error(e);
+      toast.error("保存に失敗しました。ストレージ設定を確認してください。");
+    }
   };
 
   return (
@@ -123,7 +160,7 @@ export default function BaseInfo() {
             type="button"
             onClick={handleSubmit}
             className="inline-flex items-center justify-center rounded-full px-5 py-3 font-semibold
-             !bg-blue-500 text-gray-900 hover:!bg-blue-600 active:translate-y-px transition"
+             bg-[#ccc] text-gray-900 hover:bg-gray-600 active:translate-y-px transition"
           >
             完了
           </button>
