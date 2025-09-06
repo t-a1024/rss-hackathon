@@ -2,7 +2,6 @@
 import { useState } from "react";
 import Heading from "../components/Heading/Heading";
 import { IntegerStepperField } from "../components/IntegerInputField/IntegerInputField";
-import Button from "../components/Button/Button";
 import BackgroundImage from "../Image/card_background.jpg";
 import { toast } from "react-toastify";
 import { Copy } from "lucide-react";
