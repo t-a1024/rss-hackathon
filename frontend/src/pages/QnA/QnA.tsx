@@ -7,6 +7,7 @@ import {getAPI, postAPI} from "./../../util.ts";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import "./QnA.css";
+import BG from "./../../Image/Second.png";
 
 const dummyData:Array<Question> = [
         {
@@ -32,13 +33,9 @@ export default function QnA(){
     const [questions,setQuestions] = useState<Array<Question>>(dummyData);
     useEffect(() => {
         const fetchData = async () => {
-            console.log("useEffect!");
-
             try {
-                console.log(roomId);
                 const json: GetJSON = await getAPI(`rooms/${roomId}`);
                 setQuestions(json.questions);
-                console.log(json);
             } catch (err) {
                 console.log(err);
             }
@@ -53,7 +50,7 @@ export default function QnA(){
     postData.birthdate = tmp.birthdate;
     postData.aspiration = tmp.aspiration;
     postData.hometown = tmp.hometown;
-    postData.affiliation=tmp.affiliation;
+    postData.affiliation = tmp.affiliation;
 
     const [post,setPost] = useState<PostJSON>(postData);
 
@@ -70,26 +67,8 @@ export default function QnA(){
     };
 
     const handleClick = ()=>{
-        // POST する処理を書く
-        const postData = async(data:JSON) =>{
-            try{
-                const json = await postAPI(`rooms/${roomId}/answers`,data);
-                if (roomId)navigate(`/rooms/${roomId}/results`);
-                else toast.error("URL から roomId を取得できませんでした。");
-                console.log(json);
-            }catch(err){
-                console.log(err);
-                toast.error("質問の回答の送信に失敗しました。");
-            }
-        };
         // すべてに回答してもらうバリデーションの実装
-        let isCompleted = true;
-        for(let answer of post.answers){
-            if(!answer.value){
-                isCompleted = false;
-                break;
-            }
-        }
+        let isCompleted = post.answers.every(answer => answer.value);
         if(
             !isCompleted ||
             post.answers.length === 0
@@ -97,36 +76,53 @@ export default function QnA(){
             toast.error("全ての質問に回答してください。");
             return ;
         }
+        // POST する処理を書く
+        const postData = async(data:JSON) =>{
+            try{
+                const json = await postAPI(`rooms/${roomId}/answers`,data);
+                if (roomId)navigate(`/rooms/${roomId}/results`);
+                else toast.error("URL から roomId を取得できませんでした。");
+                console.log("POST Request's responce is",json);
+            }catch(err){
+                console.log(err);
+                toast.error("質問の回答の送信に失敗しました。");
+            }
+        };
         const jsonStr = JSON.stringify(post);
         const obj:JSON = JSON.parse(jsonStr);
         postData(obj);
     };
 
     return(
-        <>
-            <Heading 
-            size="lg" 
-            weight="semibold" 
-            align="left"
-            >
-                {postData.name}さん
-            </Heading>
-            <div 
-            className="QnA"
-            >
-                {
-                    questions.map(
-                        (question) =>{
-                            return <QuestionContainer 
-                            key={question.questionId}
-                            questionContent={question.question} 
-                            setAnswer={(text:string) => setAnswer(question.questionId,text)} 
-                            />
+            <div>
+                <Heading 
+                size="lg" 
+                weight="semibold" 
+                align="left" 
+                >
+                    {postData.name}さん
+                </Heading>
+                <div 
+                className="min-h-screen flex items-start sm:items-center justify-center p-4 bg-cover bg-center"
+                style={{ backgroundImage: `url(${BG})` }}
+                >
+                    <div 
+                    className="QnA"
+                    >
+                        {
+                            questions.map(
+                                (question) =>{
+                                    return <QuestionContainer 
+                                    key={question.questionId}
+                                    questionContent={question.question} 
+                                    setAnswer={(text:string) => setAnswer(question.questionId,text)} 
+                                    />
+                                }
+                            )
                         }
-                    )
-                }
-                <Button text="回答" onClickFunc={handleClick}/>
+                        <Button text="回答" onClickFunc={handleClick}/>
+                    </div>
+                </div>
             </div>
-        </>
     );
 }
