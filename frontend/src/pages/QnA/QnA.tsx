@@ -53,6 +53,7 @@ export default function QnA(){
     postData.birthdate = tmp.birthdate;
     postData.aspiration = tmp.aspiration;
     postData.hometown = tmp.hometown;
+    postData.affiliation=tmp.affiliation;
 
     const [post,setPost] = useState<PostJSON>(postData);
 
