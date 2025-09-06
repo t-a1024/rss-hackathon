@@ -3,6 +3,7 @@ import { useState } from "react";
 import Heading from "../components/Heading/Heading";
 import { IntegerStepperField } from "../components/IntegerInputField/IntegerInputField";
 import Button from "../components/Button/Button";
+import BackgroundImage from "../Image/card_background.jpg";
 import { toast } from "react-toastify";
 import { Copy } from "lucide-react";
 
@@ -67,44 +68,64 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-6 animate-slide-up-fade">
-      <Heading as="h1" size="display" align="center" weight="bold" gradient id="welcome">
-        なにものへようこそ
-      </Heading>
-
-      <section className="space-y-6 mt-3">
-        <Heading as="h2" size="xl" align="center" weight="bold" id="participants">
-          参加人数を入力
+    <main className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-6 animate-slide-up-fade pop">
+      <div
+        className="border-2 border-yellow-500 rounded-2xl shadow-md p-20 bg-cover bg-center"
+        style={{ backgroundImage: `url(${BackgroundImage})` }}
+      >
+        <Heading
+          as="h1"
+          size="display"
+          align="center"
+          weight="bold"
+          id="welcome"
+          className="text-black"
+        >
+          <span className="text-orange-500">ナニモノ？</span>
+          へようこそ
         </Heading>
 
-        <div className="flex items-center justify-center gap-3">
-          <IntegerStepperField
-            id="participantsCount"
-            name="participantsCount"
-            value={count}
-            onChange={setCount}
-            min={2}
-            max={10}
-            step={1}
-            size="md"
-            placeholder="2"
-          />
-        </div>
-
-        <p className="text-sm text-gray-500 text-center">
-          現在の人数: <span className="font-medium">{count ?? "未入力"}</span>
-        </p>
-        <div className="flex justify-center">
-          <button
-            type="button"
-            onClick={handleNext}
-            className="inline-flex items-center justify-center rounded-full px-5 py-3 font-semibold
-             bg-[#ccc] text-gray-900 hover:bg-gray-600 active:translate-y-px transition"
+        <section className="space-y-6 mt-3">
+          <Heading
+            as="h2"
+            size="xl"
+            align="center"
+            weight="bold"
+            id="participants"
+            className="text-black"
           >
-            {loading ? "作成中..." : "完了"}
-          </button>
-        </div>
-      </section>
+            参加人数を入力
+          </Heading>
+
+          <div className="flex items-center justify-center gap-3">
+            <IntegerStepperField
+              id="participantsCount"
+              name="participantsCount"
+              value={count}
+              onChange={setCount}
+              min={2}
+              max={10}
+              step={1}
+              size="md"
+              placeholder="2"
+            />
+          </div>
+
+          <p className="text-3sm text-black text-center">
+            現在の人数: <span className="font-medium">{count ?? "未入力"}</span>
+          </p>
+          <div className="flex justify-center">
+            <button
+              type="button"
+              onClick={handleNext}
+              className="inline-flex items-center justify-center rounded-full px-5 py-3 font-semibold
+            bg-gray-200 text-gray-900 hover:text-orange-500 active:translate-y-px transition"
+            >
+              {loading ? "作成中..." : "完了"}
+            </button>
+          </div>
+        </section>
+      </div>
     </main>
   );
 }
