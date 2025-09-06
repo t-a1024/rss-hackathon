@@ -73,17 +73,17 @@ export default function QnA(){
         const postData = async(data:JSON) =>{
             try{
                 const json = await postAPI(`rooms/${roomId}/answers`,data);
+                if (roomId)navigate(`/rooms/${roomId}/results`);
+                else toast.error("URL から roomId を取得できませんでした。");
                 console.log(json);
             }catch(err){
                 console.log(err);
+                toast.error("質問の回答の送信に失敗しました．");
             }
         };
         const jsonStr = JSON.stringify(post);
         const obj:JSON = JSON.parse(jsonStr);
         postData(obj);
-        console.log(post);
-        if (roomId)navigate(`/rooms/${roomId}/results`);
-        else toast.error("URL から roomId を取得できませんでした。");
     };
 
     return(
