@@ -78,9 +78,17 @@ function selectRandomQuestions(questions, count = 2) {
 
 /** 役割割り振り結果の生成 */
 async function generateRoleAssignmentResults(roomId, answerData) {
-  try {    
-    const roleAssignmentResults = await assignRolesForRoom(answerData);
+  try {
+    // 部屋情報を取得して質問内容を含める
+    const room = rooms.get(roomId);
+    if (!room) {
+      throw new Error(`Room not found: ${roomId}`);
+    }
     
+
+    const roleAssignmentResults = await assignRolesForRoom(answerData, room.questions);
+    
+  
     const result = {
       results: roleAssignmentResults,
       generatedAt: new Date().toISOString()
