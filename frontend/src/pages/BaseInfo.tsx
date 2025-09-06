@@ -5,7 +5,7 @@ import Text from "../components/Text/text";
 import Heading from "../components/Heading/Heading";
 import OneLineInputField from "../components/OneLineInputField/OneLineInputField";
 import { BirthdateDatePicker, type Birthdate } from "../components/IntegerInputField/IntegerInputField";
-
+import { useNavigate, useParams } from "react-router-dom";
 const pad2 = (n: number) => (n < 10 ? `0${n}` : String(n));
 const formatBirthdate = (b: Birthdate) =>
   b && b.year && b.month && b.day ? `${b.year}-${pad2(b.month)}-${pad2(b.day)}` : "";
@@ -18,7 +18,9 @@ export default function BaseInfo() {
   const [affiliation, setAffiliation] = useState("");
   const [motivation, setMotivation] = useState("");
 
-
+  const navigate = useNavigate();
+  const params = useParams();
+  const roomId = (params as any).roomId ?? (params as any).id;
 
   const handleSubmit = () => {
     const msgs: string[] = [];
@@ -66,7 +68,12 @@ export default function BaseInfo() {
   
     try {
       localStorage.setItem("baseInfo", JSON.stringify(payload));
-      toast.success("保存しました！", { autoClose: 2500 });
+      // toast.success("保存しました！", { autoClose: 2500 });
+      if (roomId) {
+        navigate(`/rooms/${roomId}/QnA`);
+      } else {
+        toast.error("URL から roomId を取得できませんでした。");
+      }
     } catch (e) {
       console.error(e);
       toast.error("保存に失敗しました。ストレージ設定を確認してください。");

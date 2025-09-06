@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import BaseInfo from "./pages/BaseInfo";
 import "./index.css";
+import QnA from "./pages/QnA/QnA"; 
 
 export default function App() {
   return (
@@ -21,6 +22,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/rooms/:roomId" element={<BaseInfo/>}/>
+          <Route path="/rooms/:roomId/QnA" element={<QnA />} />
         </Routes>
       </main>
     </BrowserRouter>
