@@ -1,5 +1,5 @@
 import type { TextProps, TextSize, TextTone, TextWeight, TextAlign } from "../../types/component/Layer1";
-
+import type { ElementType } from "react";  
 const cx = (...xs: Array<string | false | null | undefined>) => xs.filter(Boolean).join(" ");
 
 const sizeMap: Record<TextSize, string> = {
@@ -51,7 +51,7 @@ export default function Text({
   id,
   ...rest
 }: TextProps) {
-  const Tag = as as keyof JSX.IntrinsicElements;
+  const Tag = as as ElementType; 
 
   return (
     <Tag

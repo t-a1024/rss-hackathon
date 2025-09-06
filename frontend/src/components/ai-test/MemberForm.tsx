@@ -1,5 +1,4 @@
 import React from 'react';
-import type { TeamMember } from '../types/api';
 
 interface MemberFormProps {
   formData: {

@@ -1,5 +1,4 @@
-import React from 'react';
-import type { TeamRoleAssignmentResponse } from '../types/api';
+import type { TeamRoleAssignmentResponse } from '../../types/api';
 
 interface ResultDisplayProps {
   result: TeamRoleAssignmentResponse | null;

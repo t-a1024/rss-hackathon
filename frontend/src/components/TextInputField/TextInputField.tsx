@@ -3,23 +3,21 @@ import "./TextInputField.css";
 
 type TextInputFieldProps={
     setText:( text:string )=>void, 
-    rows:number, 
     cols:number, 
     placeholder:string
 };
 
-export default function TextInputField({ setText,rows ,cols ,placeholder } :TextInputFieldProps){
+export default function TextInputField({ setText, cols, placeholder } :TextInputFieldProps){
     const [content, setContent] = useState<string>("");
     const handleChange = ( evt:React.ChangeEvent<HTMLTextAreaElement> )=>{
         evt.stopPropagation();
-        setContent(evt.target.value);
-        evt.target.value && setText(evt.target.value);
+        evt.target.value ? setContent(evt.target.value) : setContent("");
+        evt.target.value ? setText(evt.target.value) : setText("");
     }
     
     return (
         <textarea 
         className="TextInputField" 
-        rows={rows} 
         cols={cols} 
         placeholder={placeholder} 
         value={content} 

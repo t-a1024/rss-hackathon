@@ -1,0 +1,221 @@
+// src/pages/BaseInfo.tsx
+import  {  useState, useEffect } from "react";
+import { toast } from "react-toastify"; 
+import Text from "../components/Text/text";
+import Heading from "../components/Heading/Heading";
+import OneLineInputField from "../components/OneLineInputField/OneLineInputField";
+import { BirthdateDatePicker, type Birthdate } from "../components/IntegerInputField/IntegerInputField";
+import BG from "../Image/Second.png";
+import BackgroundImage from "../Image/card_background.jpg";
+import { useNavigate, useParams } from "react-router-dom";
+const pad2 = (n: number) => (n < 10 ? `0${n}` : String(n));
+const formatBirthdate = (b: Birthdate) =>
+  b && b.year && b.month && b.day ? `${b.year}-${pad2(b.month)}-${pad2(b.day)}` : "";
+
+// 誕生日から年齢を計算する関数
+const calculateAge = (birthdate: Birthdate): number | null => {
+  if (!birthdate.year || !birthdate.month || !birthdate.day) {
+    return null;
+  }
+  
+  const today = new Date();
+  const birthDate = new Date(birthdate.year, birthdate.month - 1, birthdate.day);
+  
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const monthDiff = today.getMonth() - birthDate.getMonth();
+  
+  // 誕生日がまだ来ていない場合は年齢を1つ減らす
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+  }
+  
+  return age >= 0 ? age : null;
+};
+
+export default function BaseInfo() {
+  const [name, setName] = useState("");
+  const [birthdate, setBirthdate] = useState<Birthdate>({ year: null, month: null, day: null });
+  const [age, setAge] = useState("");
+  const [origin, setOrigin] = useState("");
+  const [affiliation, setAffiliation] = useState("");
+  const [motivation, setMotivation] = useState("");
+
+  const navigate = useNavigate();
+  const params = useParams();
+  const roomId = (params as any).roomId ?? (params as any).id;
+
+  // 誕生日が変更されたときに年齢を自動計算
+  useEffect(() => {
+    const calculatedAge = calculateAge(birthdate);
+    if (calculatedAge !== null) {
+      setAge(calculatedAge.toString());
+    } else {
+      // 誕生日が不完全な場合は年齢をクリア
+      if (!birthdate.year && !birthdate.month && !birthdate.day) {
+        setAge("");
+      }
+    }
+  }, [birthdate]);
+
+  const handleSubmit = () => {
+    const msgs: string[] = [];
+
+    const birthStr = formatBirthdate(birthdate);
+
+    const ageNum = Number.parseInt(age, 10);
+    const ageValid = Number.isInteger(ageNum) && ageNum > 0;
+
+    if (!name.trim()) msgs.push("名前を入力してください。");
+    if (!birthStr) msgs.push("誕生日を選択してください。");
+    if (!age.trim()) {
+      msgs.push("年齢を入力してください。");
+    } else if (!ageValid) {
+      msgs.push("年齢は正の整数で入力してください。");
+    }
+    if (!origin.trim()) msgs.push("出身を入力してください。");
+    if (!affiliation.trim()) msgs.push("所属を入力してください。");
+    if (!motivation.trim()) msgs.push("意気込みを入力してください。");
+
+    if (msgs.length > 0) {
+      // 失敗トースト（リスト表示）
+      toast.error(
+        <div>
+          入力内容を確認してください。
+          <ul className="mt-1 list-disc list-inside">
+            {msgs.map((m, i) => (
+              <li key={i}>{m}</li>
+            ))}
+          </ul>
+        </div>,
+        { autoClose: 5000 }
+      );
+      return;
+    }
+
+    const payload = {
+      name: name.trim(),
+      birthdate: birthStr,
+      age: ageNum,
+      hometown: origin.trim(),
+      affiliation: affiliation.trim(),
+      aspiration: motivation.trim(),
+    };
+
+    try {
+      localStorage.setItem("baseInfo", JSON.stringify(payload));
+      // toast.success("保存しました！", { autoClose: 2500 });
+      if (roomId) {
+        navigate(`/rooms/${roomId}/QnA`);
+      } else {
+        toast.error("URL から roomId を取得できませんでした。");
+      }
+    } catch (e) {
+      console.error(e);
+      toast.error("保存に失敗しました。ストレージ設定を確認してください。");
+    }
+  };
+
+  return (
+    <main
+      className="min-h-screen flex items-start sm:items-center justify-center p-4 bg-cover bg-center"
+      style={{ backgroundImage: `url(${BG})` }}
+    >
+      <div
+        className="w-full max-w-3xl border-2 border-yellow-500 rounded-2xl shadow-md p-10 bg-cover bg-center"
+        style={{ backgroundImage: `url(${BackgroundImage})` }}
+      >
+        <section className="w-full max-w-2xl space-y-8 texy">
+          <Heading as="h1" size="xl" weight="bold" align="center" id="baseinfo">
+            基本情報の入力
+          </Heading>
+
+          <div>
+            {/* 名前（1行入力） */}
+            <div className="space-y-2 flex justify-between">
+              <Text as="label" size="sm" weight="semibold" tone="secondary">
+                名前
+              </Text>
+              <OneLineInputField placeholder="山田 太郎" setText={setName} />
+            </div>
+
+            {/* 誕生日（カレンダーUI） */}
+            <div className="space-y-2 flex justify-between">
+              <Text as="label" size="sm" weight="semibold" tone="secondary">
+                誕生日
+              </Text>
+              <BirthdateDatePicker
+                value={birthdate}
+                onChange={setBirthdate}
+                minYear={1900}
+                maxYear={new Date().getFullYear()}
+                className="w-48"
+              />
+            </div>
+
+          {/* 年齢（1行入力） */}
+          <div className="space-y-2 flex justify-between">
+            <Text as="label" size="sm" weight="semibold" tone="secondary">
+              年齢
+            </Text>
+            <OneLineInputField placeholder="20" setText={setAge} value={age} />
+          </div>
+
+            {/* 出身（1行入力） */}
+            <div className="space-y-2 flex justify-between">
+              <Text as="label" size="sm" weight="semibold" tone="secondary">
+                出身
+              </Text>
+              <OneLineInputField placeholder="東京都千代田区" setText={setOrigin} />
+            </div>
+
+            {/* 所属（1行入力） */}
+            <div className="space-y-2 flex justify-between">
+              <Text as="label" size="sm" weight="semibold" tone="secondary">
+                所属
+              </Text>
+              <OneLineInputField placeholder="◯◯大学/◯◯株式会社" setText={setAffiliation} />
+            </div>
+
+            {/* 意気込み（複数行） */}
+            <div className="space-y-2">
+              <label htmlFor="motivation" className="block text-sm font-semibold text-gray-700">
+                意気込み
+              </label>
+              <textarea
+                id="motivation"
+                className="block w-full  bg-[#aaa] 
+               border border-gray-300 rounded-xl p-3 min-h-28
+               focus:border-gray-900 focus:ring-2 focus:ring-gray-900/10 outline-none transition"
+                placeholder="めちゃくちゃ頑張る"
+                value={motivation}
+                onChange={(e) => setMotivation(e.target.value)}
+              />
+            </div>
+          </div>
+
+          {/* プレビュー */}
+          <div className="rounded-xl border bg-white p-4 space-y-2">
+            <Text size="sm" tone="muted">プレビュー</Text>
+            <Text size="md"><span className="font-semibold">名前：</span>{name || ""}</Text>
+            <Text size="md"><span className="font-semibold">誕生日：</span>{formatBirthdate(birthdate) || ""}</Text>
+            <Text size="md"><span className="font-semibold">年齢：</span>{age || ""}</Text>
+            <Text size="md"><span className="font-semibold">出身：</span>{origin || ""}</Text>
+            <Text size="md"><span className="font-semibold">所属：</span>{affiliation || ""}</Text>
+            <Text size="md"><span className="font-semibold">意気込み：</span>{motivation || ""}</Text>
+          </div>
+
+          <div className="flex justify-center">
+            <button
+              type="button"
+              onClick={handleSubmit}
+              className="inline-flex items-center justify-center rounded-full px-5 py-3 font-semibold
+             bg-[#ccc] text-gray-900 hover:bg-gray-600 active:translate-y-px transition"
+            >
+              完了
+            </button>
+          </div>
+        </section>
+      </div>
+    </main>
+  );
+}

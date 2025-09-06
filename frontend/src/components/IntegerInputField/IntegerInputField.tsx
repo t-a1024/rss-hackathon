@@ -115,9 +115,11 @@ export function IntegerStepperField({
           type="button"
           className={cx(
             "flex items-center justify-center select-none",
-            "rounded-l-md border border-r-0 border-gray-300",
-            "bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-900/10",
-            sizeMap[size].btn
+            "rounded-l-md border border-r-md border-gray-400", // ← borderを濃く
+            "bg-white hover:bg-gray-100",                     // ← 背景を白に
+            "focus:outline-none focus:ring-2 focus:ring-gray-900/10",
+            sizeMap[size].btn,
+            "shadow-sm"                                       // ← 影で浮かせる
           )}
           onClick={() => adjust(-1)}
           disabled={disabled}
@@ -139,7 +141,7 @@ export function IntegerStepperField({
           disabled={disabled}
           aria-invalid={hasError || undefined}
           className={cx(
-            "border border-gray-300 bg-white outline-none transition text-center rounded-lg",
+            "border border-gray-300 bg-white outline-none transition text-center",
             hasError
               ? "focus:ring-2 focus:ring-rose-200"
               : "focus:border-gray-900 focus:ring-2 focus:ring-gray-900/10",
@@ -163,9 +165,11 @@ export function IntegerStepperField({
           type="button"
           className={cx(
             "flex items-center justify-center select-none",
-            "rounded-r-md border border-l-0 border-gray-300",
-            "bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-900/10",
-            sizeMap[size].btn
+            "rounded-r-md border border-r-md border-gray-400", 
+            "bg-white hover:bg-gray-100",                  
+            "focus:outline-none focus:ring-2 focus:ring-gray-900/10",
+            sizeMap[size].btn,
+            "shadow-sm"                                     
           )}
           onClick={() => adjust(+1)}
           disabled={disabled}

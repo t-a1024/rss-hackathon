@@ -10,7 +10,7 @@ export default function Button( {text, onClickFunc} : ButtonProps){
             <button 
             type="submit" 
             className="Button" 
-            onClick={onClickFunc}
+            onClick={onClickFunc} 
             >
                 {text}
             </button>
