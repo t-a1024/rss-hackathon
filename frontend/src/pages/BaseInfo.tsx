@@ -1,16 +1,36 @@
 // src/pages/BaseInfo.tsx
-import { useState } from "react";
-import { toast } from "react-toastify";
+import  {  useState, useEffect } from "react";
+import { toast } from "react-toastify"; 
 import Text from "../components/Text/text";
 import Heading from "../components/Heading/Heading";
 import OneLineInputField from "../components/OneLineInputField/OneLineInputField";
 import { BirthdateDatePicker, type Birthdate } from "../components/IntegerInputField/IntegerInputField";
 import BG from "../Image/Second.png";
 import BackgroundImage from "../Image/card_background.jpg";
-
+import { useNavigate, useParams } from "react-router-dom";
 const pad2 = (n: number) => (n < 10 ? `0${n}` : String(n));
 const formatBirthdate = (b: Birthdate) =>
   b && b.year && b.month && b.day ? `${b.year}-${pad2(b.month)}-${pad2(b.day)}` : "";
+
+// 誕生日から年齢を計算する関数
+const calculateAge = (birthdate: Birthdate): number | null => {
+  if (!birthdate.year || !birthdate.month || !birthdate.day) {
+    return null;
+  }
+  
+  const today = new Date();
+  const birthDate = new Date(birthdate.year, birthdate.month - 1, birthdate.day);
+  
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const monthDiff = today.getMonth() - birthDate.getMonth();
+  
+  // 誕生日がまだ来ていない場合は年齢を1つ減らす
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+  }
+  
+  return age >= 0 ? age : null;
+};
 
 export default function BaseInfo() {
   const [name, setName] = useState("");
@@ -20,7 +40,22 @@ export default function BaseInfo() {
   const [affiliation, setAffiliation] = useState("");
   const [motivation, setMotivation] = useState("");
 
+  const navigate = useNavigate();
+  const params = useParams();
+  const roomId = (params as any).roomId ?? (params as any).id;
 
+  // 誕生日が変更されたときに年齢を自動計算
+  useEffect(() => {
+    const calculatedAge = calculateAge(birthdate);
+    if (calculatedAge !== null) {
+      setAge(calculatedAge.toString());
+    } else {
+      // 誕生日が不完全な場合は年齢をクリア
+      if (!birthdate.year && !birthdate.month && !birthdate.day) {
+        setAge("");
+      }
+    }
+  }, [birthdate]);
 
   const handleSubmit = () => {
     const msgs: string[] = [];
@@ -68,7 +103,12 @@ export default function BaseInfo() {
 
     try {
       localStorage.setItem("baseInfo", JSON.stringify(payload));
-      toast.success("保存しました！", { autoClose: 2500 });
+      // toast.success("保存しました！", { autoClose: 2500 });
+      if (roomId) {
+        navigate(`/rooms/${roomId}/QnA`);
+      } else {
+        toast.error("URL から roomId を取得できませんでした。");
+      }
     } catch (e) {
       console.error(e);
       toast.error("保存に失敗しました。ストレージ設定を確認してください。");
@@ -112,13 +152,13 @@ export default function BaseInfo() {
               />
             </div>
 
-            {/* 年齢（1行入力） */}
-            <div className="space-y-2 flex justify-between">
-              <Text as="label" size="sm" weight="semibold" tone="secondary">
-                年齢
-              </Text>
-              <OneLineInputField placeholder="20" setText={setAge} />
-            </div>
+          {/* 年齢（1行入力） */}
+          <div className="space-y-2 flex justify-between">
+            <Text as="label" size="sm" weight="semibold" tone="secondary">
+              年齢
+            </Text>
+            <OneLineInputField placeholder="20" setText={setAge} value={age} />
+          </div>
 
             {/* 出身（1行入力） */}
             <div className="space-y-2 flex justify-between">
