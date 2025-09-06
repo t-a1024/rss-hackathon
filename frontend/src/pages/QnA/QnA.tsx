@@ -74,7 +74,7 @@ export default function QnA(){
             weight="semibold" 
             align="left"
             >
-                ~さん
+                {postData.name}さん
             </Heading>
             <div 
             className="QnA"
