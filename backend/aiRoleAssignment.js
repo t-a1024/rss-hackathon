@@ -66,9 +66,7 @@ ${index + 1}. ${data.name} (${data.age}歳)
 
     const result = await model.generateContent(prompt);
     const responseText = result.response.text();
-    
-    console.log('AI Response:', responseText);
-    
+        
     // JSONの抽出処理を改善
     let jsonString = '';
     
@@ -90,7 +88,6 @@ ${index + 1}. ${data.name} (${data.age}歳)
       throw new Error('Failed to extract JSON from AI response');
     }
 
-    console.log('Extracted JSON:', jsonString);
     const aiResponse = JSON.parse(jsonString);
     
     // レスポンスの形式を検証
@@ -156,9 +153,7 @@ ${index + 1}. ${member.name} (${member.age}歳)
 
     const result = await model.generateContent(prompt);
     const responseText = result.response.text();
-    
-    console.log('AI Response:', responseText); // デバッグ用ログ
-    
+        
     // JSONの抽出処理を改善
     let jsonString = '';
     
@@ -180,7 +175,6 @@ ${index + 1}. ${member.name} (${member.age}歳)
       throw new Error('Failed to extract JSON from AI response');
     }
 
-    console.log('Extracted JSON:', jsonString); // デバッグ用ログ
     const aiResponse = JSON.parse(jsonString);
     
     // レスポンスの形式を検証

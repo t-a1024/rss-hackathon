@@ -78,9 +78,7 @@ function selectRandomQuestions(questions, count = 2) {
 
 /** 役割割り振り結果の生成 */
 async function generateRoleAssignmentResults(roomId, answerData) {
-  try {
-    console.log(`Generating role assignments for room: ${roomId}`);
-    
+  try {    
     const roleAssignmentResults = await assignRolesForRoom(answerData);
     
     const result = {
@@ -89,7 +87,6 @@ async function generateRoleAssignmentResults(roomId, answerData) {
     };
     
     results.set(roomId, result);
-    console.log(`Role assignments generated successfully for room: ${roomId}`);
   } catch (error) {
     console.error(`Failed to generate role assignments for room ${roomId}:`, error);
     
@@ -307,10 +304,7 @@ app.post('/rooms/:id/answers', async (req, res) => {
     answers.set(roomId, currentAnswers);
 
     // 部屋が満員になった場合、結果を生成
-    if (currentAnswers.length === room.capacity) {
-      console.log("結果が揃いました。");
-      console.log("全ての回答:", currentAnswers);
-      
+    if (currentAnswers.length === room.capacity) {      
       // 非同期で結果を生成（レスポンスを遅延させないため）
       generateRoleAssignmentResults(roomId, currentAnswers);
     }
@@ -401,9 +395,5 @@ app.get('/rooms/:id/results', (req, res) => {
 
 app.listen(port, () => {
   console.log(`🚀 Server listening on port ${port}`);
-  console.log(`📍 API endpoints:`);
-  console.log(`   POST /api/roles/assign - Assign roles to team members`);
-  console.log(`   GET  /api/roles - Get available roles`);
-  console.log(`   GET  /api/health - Health check`);
   console.log(`Allowed CORS origin: ${allowedOrigin}`);
 });
