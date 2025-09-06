@@ -34,7 +34,7 @@ const roleImageMap: Record<string, string> = {
   Cartographer,
   Chronicler,
   Inventor,
-  Lightkeeper,
+  "Lighthouse Keeper": Lightkeeper,
   Mediator,
   Ploneer,          
   Pioneer: Ploneer,    
