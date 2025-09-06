@@ -26,7 +26,7 @@ const postData:PostJSON = {
 }
 
 export default function QnA(){
-    const { roomId } = useParams(); // フックはトップレベルで使う方が安全
+    const { roomId } = useParams();
     const navigate = useNavigate();
     // 初回レンダリング時だけ行う処理
     const [questions,setQuestions] = useState<Array<Question>>(dummyData);
