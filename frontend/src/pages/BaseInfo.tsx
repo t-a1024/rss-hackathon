@@ -1,9 +1,7 @@
 // src/pages/BaseInfo.tsx
 import React, { useMemo, useState } from "react";
 import Text from "../components/Text/text";
-import TextInputField from "../components/TextInputField/TextInputField";
 import Heading from "../components/Heading/Heading";
-import Button from "../components/Button/Button";
 import OneLineInputField from "../components/OneLineInputField/OneLineInputField";
 import { BirthdateDatePicker, type Birthdate } from "../components/IntegerInputField/IntegerInputField";
 
@@ -127,7 +125,7 @@ export default function BaseInfo() {
             className="inline-flex items-center justify-center rounded-full px-5 py-3 font-semibold
              !bg-blue-500 text-gray-900 hover:!bg-blue-600 active:translate-y-px transition"
           >
-            送信
+            完了
           </button>
         </div>
       </section>

@@ -6,41 +6,47 @@ import Button from "../components/Button/Button";
 import { toast } from "react-toastify";
 import { Copy } from "lucide-react";
 
-// プロキシを使うなら "/api"、CORSなら import.meta.env から
-const API_BASE =
-  import.meta.env.VITE_API_URL?.replace(/\/$/, "") || "/api";
+const API_BASE = import.meta.env.VITE_API_URL?.replace(/\/$/, "") || "/api";
 
 export default function Home() {
-  const [count, setCount] = useState<number | null>(1);
+  const [count, setCount] = useState<number | null>(2);        // ← 既定を2に（最小に合わせる）
   const [loading, setLoading] = useState(false);
 
-  // 部屋作成 → URL をトーストで表示
   const handleNext = async () => {
     if (count == null) {
       toast.warn("人数を入力してください");
       return;
     }
+
     try {
       setLoading(true);
 
       const res = await fetch(`${API_BASE}/rooms`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ participants: count }),
+        // ★ participants ではなく capacity を送る
+        body: JSON.stringify({ capacity: count }),
       });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data: { id: string; room: any } = await res.json();
 
-      // 表示用のルームURL（例: 自分のフロントの /rooms/:id に遷移させる想定）
+      // エラー時はサーバーのJSON/テキストを拾って表示
+      if (!res.ok) {
+        const raw = await res.text();
+        let err: any;
+        try { err = JSON.parse(raw); } catch { err = { message: raw }; }
+        const msg = err?.message || err?.error || `HTTP ${res.status}`;
+        toast.error(`部屋の作成に失敗しました: ${msg}`);
+        return;
+      }
+
+      const data: { id: string; url?: string } = await res.json();
+
       const roomUrl = `${window.location.origin}/rooms/${data.id}`;
 
       toast.info(
         <div className="flex flex-col gap-2">
           <span>完了しました！ 以下のURLをコピーできます:</span>
           <div className="flex items-center gap-2">
-            <code className="px-2 py-1 bg-gray-100 rounded text-sm break-all">
-              {roomUrl}
-            </code>
+            <code className="px-2 py-1 bg-gray-100 rounded text-sm break-all">{roomUrl}</code>
             <button
               onClick={() => {
                 navigator.clipboard.writeText(roomUrl);
@@ -50,14 +56,13 @@ export default function Home() {
               aria-label="URLをコピー"
             >
               <Copy size={16} />
-              コピー
             </button>
           </div>
         </div>
       );
     } catch (e) {
       console.error(e);
-      toast.error("部屋の作成に失敗しました");
+      toast.error("ネットワークエラーが発生しました");
     } finally {
       setLoading(false);
     }
@@ -80,8 +85,8 @@ export default function Home() {
             name="participantsCount"
             value={count}
             onChange={setCount}
-            min={1}
-            max={99}
+            min={1}          
+            max={10}
             step={1}
             size="md"
             placeholder="1"
