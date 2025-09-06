@@ -2,6 +2,9 @@
     background-color:#ccc;
     color:#000;
     transition:all 0.5s ease-in-out;
+    border:1px solid #000;
+    border-radius:1rem;
+    padding:0.5rem 0.2rem;
 }
 
 .Button:hover{
