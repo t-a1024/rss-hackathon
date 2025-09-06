@@ -25,8 +25,7 @@ const postData:PostJSON = {
 }
 
 export default function QnA(){
-    const { roomId } = useParams(); // フックはトップレベルで使う方が安全
-    // 初回レンダリング時だけ行う処理
+    const { roomId } = useParams();
     const [questions,setQuestions] = useState<Array<Question>>(dummyData);
     useEffect(() => {
         const fetchData = async () => {
@@ -41,10 +40,9 @@ export default function QnA(){
                 console.log(err);
             }
         };
-        fetchData(); // ここで関数を呼ぶ
+        fetchData(); 
     }, []);
 
-    // 基本情報設定
     const tmp:BaseInformation = JSON.parse(localStorage.baseInfo);
     postData.name = tmp.name;
     postData.age = tmp.age;
