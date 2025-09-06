@@ -6,7 +6,6 @@ import Home from "./pages/Home";
 import BaseInfo from "./pages/BaseInfo";
 import QnA from "./pages/QnA/QnA";
 import "./index.css";
-import QnA from "./pages/QnA/QnA"; 
 
 export default function App() {
   return (
