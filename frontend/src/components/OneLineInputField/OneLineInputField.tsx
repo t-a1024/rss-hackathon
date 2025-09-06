@@ -11,7 +11,7 @@ export default function OneLineInputField( {placeholder, setText} : OneLineInput
     const handleChange = ( evt:React.ChangeEvent<HTMLInputElement> )=>{
         evt.stopPropagation();
         evt.target.value ? setContent(evt.target.value) : setContent("");
-        evt.target.value ? setText(evt.target.value) : setContent("") ;
+        evt.target.value ? setText(evt.target.value) : setText("") ;
     };
 
     return (
