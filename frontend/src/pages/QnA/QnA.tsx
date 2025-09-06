@@ -7,6 +7,7 @@ import {getAPI, postAPI} from "./../../util.ts";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import "./QnA.css";
+import BG from "./../../Image/Second.png";
 
 const dummyData:Array<Question> = [
         {
@@ -49,6 +50,7 @@ export default function QnA(){
     postData.birthdate = tmp.birthdate;
     postData.aspiration = tmp.aspiration;
     postData.hometown = tmp.hometown;
+    postData.affiliation = tmp.affiliation;
 
     const [post,setPost] = useState<PostJSON>(postData);
 
@@ -92,30 +94,35 @@ export default function QnA(){
     };
 
     return(
-        <>
-            <Heading 
-            size="lg" 
-            weight="semibold" 
-            align="left"
-            >
-                {postData.name}さん
-            </Heading>
-            <div 
-            className="QnA"
-            >
-                {
-                    questions.map(
-                        (question) =>{
-                            return <QuestionContainer 
-                            key={question.questionId}
-                            questionContent={question.question} 
-                            setAnswer={(text:string) => setAnswer(question.questionId,text)} 
-                            />
+            <div>
+                <Heading 
+                size="lg" 
+                weight="semibold" 
+                align="left" 
+                >
+                    {postData.name}さん
+                </Heading>
+                <div 
+                className="min-h-screen flex items-start sm:items-center justify-center p-4 bg-cover bg-center"
+                style={{ backgroundImage: `url(${BG})` }}
+                >
+                    <div 
+                    className="QnA"
+                    >
+                        {
+                            questions.map(
+                                (question) =>{
+                                    return <QuestionContainer 
+                                    key={question.questionId}
+                                    questionContent={question.question} 
+                                    setAnswer={(text:string) => setAnswer(question.questionId,text)} 
+                                    />
+                                }
+                            )
                         }
-                    )
-                }
-                <Button text="回答" onClickFunc={handleClick}/>
+                        <Button text="回答" onClickFunc={handleClick}/>
+                    </div>
+                </div>
             </div>
-        </>
     );
 }
