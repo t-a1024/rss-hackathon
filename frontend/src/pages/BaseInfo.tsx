@@ -66,7 +66,7 @@ export default function BaseInfo() {
   
     try {
       localStorage.setItem("baseInfo", JSON.stringify(payload));
-      toast.success("ローカルに保存しました！", { autoClose: 2500 });
+      toast.success("保存しました！", { autoClose: 2500 });
     } catch (e) {
       console.error(e);
       toast.error("保存に失敗しました。ストレージ設定を確認してください。");
