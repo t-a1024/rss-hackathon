@@ -1,0 +1,8 @@
+/* App.tsxに適用する用 */
+.Test{
+  display:flex;
+  flex-wrap:wrap;
+  flex-direction:column;
+  justify-content:flex-start;
+  align-content:center;
+}
