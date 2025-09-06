@@ -8,7 +8,7 @@ type TextInputFieldProps={
     placeholder:string
 };
 
-export default function TextInputField({ setText,rows ,cols ,placeholder } :TextInputFieldProps){
+export default function TextInputField({ setText, rows, cols, placeholder } :TextInputFieldProps){
     const [content, setContent] = useState<string>("");
     const handleChange = ( evt:React.ChangeEvent<HTMLTextAreaElement> )=>{
         evt.stopPropagation();
