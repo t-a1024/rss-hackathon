@@ -6,7 +6,7 @@ import Home from "./pages/Home";
 import BaseInfo from "./pages/BaseInfo";
 import QnA from "./pages/QnA/QnA";
 import "./index.css";
-
+import ShowResult from "./pages/ShowResult";
 export default function App() {
   return (
     <BrowserRouter>
@@ -23,6 +23,7 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/rooms/:roomId" element={<BaseInfo/>}/>
           <Route path="/rooms/:roomId/QnA" element={<QnA/>}/>
+          <Route path="/rooms/:roomId/results" element={<ShowResult />} />
         </Routes>
       </main>
     </BrowserRouter>
