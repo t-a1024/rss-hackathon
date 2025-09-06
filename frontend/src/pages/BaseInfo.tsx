@@ -89,19 +89,22 @@ export default function BaseInfo() {
             <Text as="label" size="sm" weight="semibold" tone="secondary">
               所属
             </Text>
-            <OneLineInputField placeholder="◯◯大学 △△学部 / ◯◯株式会社" setText={setAffiliation} />
+            <OneLineInputField placeholder="◯◯大学/◯◯株式会社" setText={setAffiliation} />
           </div>
 
           {/* 意気込み（複数行） */}
           <div className="space-y-2">
-            <Text as="label" size="sm" weight="semibold" tone="secondary">
+            <label htmlFor="motivation" className="block text-sm font-semibold text-gray-700">
               意気込み
-            </Text>
-            <TextInputField
-              rows={4}
-              cols={60}
+            </label>
+            <textarea
+              id="motivation"
+              className="block w-full  bg-[#aaa] 
+               border border-gray-300 rounded-xl p-3 min-h-28
+               focus:border-gray-900 focus:ring-2 focus:ring-gray-900/10 outline-none transition"
               placeholder="めちゃくちゃ頑張る"
-              setText={setMotivation}
+              value={motivation}
+              onChange={(e) => setMotivation(e.target.value)}
             />
           </div>
         </div>
@@ -109,16 +112,23 @@ export default function BaseInfo() {
         {/* プレビュー */}
         <div className="rounded-xl border bg-white p-4 space-y-2">
           <Text size="sm" tone="muted">プレビュー</Text>
-          <Text size="md"><span className="font-semibold">名前：</span>{name || "—"}</Text>
-          <Text size="md"><span className="font-semibold">誕生日：</span>{formatBirthdate(birthdate) || "—"}</Text>
-          <Text size="md"><span className="font-semibold">年齢：</span>{age || "—"}</Text>
-          <Text size="md"><span className="font-semibold">出身：</span>{origin || "—"}</Text>
-          <Text size="md"><span className="font-semibold">所属：</span>{affiliation || "—"}</Text>
-          <Text size="md"><span className="font-semibold">意気込み：</span>{motivation || "—"}</Text>
+          <Text size="md"><span className="font-semibold">名前：</span>{name || ""}</Text>
+          <Text size="md"><span className="font-semibold">誕生日：</span>{formatBirthdate(birthdate) || ""}</Text>
+          <Text size="md"><span className="font-semibold">年齢：</span>{age || ""}</Text>
+          <Text size="md"><span className="font-semibold">出身：</span>{origin || ""}</Text>
+          <Text size="md"><span className="font-semibold">所属：</span>{affiliation || ""}</Text>
+          <Text size="md"><span className="font-semibold">意気込み：</span>{motivation || ""}</Text>
         </div>
 
         <div className="flex justify-center">
-          <Button text="送信" onClickFunc={handleSubmit} />
+          <button
+            type="button"
+            onClick={handleSubmit}
+            className="inline-flex items-center justify-center rounded-full px-5 py-3 font-semibold
+             !bg-blue-500 text-gray-900 hover:!bg-blue-600 active:translate-y-px transition"
+          >
+            送信
+          </button>
         </div>
       </section>
     </main>
