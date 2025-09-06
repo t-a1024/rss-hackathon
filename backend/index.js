@@ -368,9 +368,7 @@ app.get('/rooms/:id/results', (req, res) => {
       const remainingParticipants = room.capacity - currentAnswers.length;
       let message;
       
-      if (remainingParticipants === 1) {
-        message = '残り一人です。';
-      } else if (remainingParticipants > 1) {
+      if (remainingParticipants > 0) {
         message = `残り${remainingParticipants}人です。`;
       } else {
         message = '結果を生成中です。';
