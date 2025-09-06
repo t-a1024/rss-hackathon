@@ -12,7 +12,7 @@ export default function TextInputField({ setText,rows ,cols ,placeholder } :Text
     const [content, setContent] = useState<string>("");
     const handleChange = ( evt:React.ChangeEvent<HTMLTextAreaElement> )=>{
         evt.stopPropagation();
-        setContent(evt.target.value);
+        evt.target.value && setContent(evt.target.value);
         evt.target.value && setText(evt.target.value);
     }
     
