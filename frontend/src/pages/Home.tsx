@@ -9,7 +9,7 @@ import { Copy } from "lucide-react";
 const API_BASE = import.meta.env.VITE_API_URL?.replace(/\/$/, "") || "/api";
 
 export default function Home() {
-  const [count, setCount] = useState<number | null>(2);   
+  const [count, setCount] = useState<number | null>(2);
   const [loading, setLoading] = useState(false);
 
   const handleNext = async () => {
@@ -42,7 +42,7 @@ export default function Home() {
 
       toast.info(
         <div className="flex flex-col gap-2">
-          <span>完了しました！ 以下のURLをコピーできます:</span>
+          <span>完了しました！ 以下のURLでルームを作成してください！</span>
           <div className="flex items-center gap-2">
             <code className="px-2 py-1 bg-gray-100 rounded text-sm break-all">{roomUrl}</code>
             <button
@@ -83,7 +83,7 @@ export default function Home() {
             name="participantsCount"
             value={count}
             onChange={setCount}
-            min={2}          
+            min={2}
             max={10}
             step={1}
             size="md"
@@ -94,9 +94,15 @@ export default function Home() {
         <p className="text-sm text-gray-500 text-center">
           現在の人数: <span className="font-medium">{count ?? "未入力"}</span>
         </p>
-
         <div className="flex justify-center">
-          <Button text={loading ? "作成中..." : "完了"} onClickFunc={handleNext} />
+          <button
+            type="button"
+            onClick={handleNext}
+            className="inline-flex items-center justify-center rounded-full px-5 py-3 font-semibold
+             bg-[#ccc] text-gray-900 hover:bg-gray-600 active:translate-y-px transition"
+          >
+            {loading ? "作成中..." : "完了"}
+          </button>
         </div>
       </section>
     </main>
