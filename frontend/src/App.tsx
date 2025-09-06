@@ -1,20 +1,10 @@
-import CssBaseline from "@mui/material/CssBaseline"; //ブラウザのデフォルトのスタイルを打ち消す用
-import OneLineInputField from "./components/OneLineInputField/OneLineInputField.tsx";
-import TextInputField from "./components/TextInputField/TextInputField.tsx";
-import Button from "./components/Button/Button.tsx";
+import { Link, Outlet } from "react-router-dom";
 import "./util.css";
 
-function App() {
+export default function App() {
   return (
-    <>
-      <CssBaseline />
-      <div>
-        <OneLineInputField placeholder="Input your name." setText={(text:string)=>{}}/>
-        <TextInputField placeholder="Input your name." rows={5} cols={10} setText={(text:string)=>{}}/>
-        <Button text="Submit" onClickFunc={()=>{}}/>
-      </div>
-    </>
-  )
+    <main className="p-6">
+      <Outlet />
+    </main>
+  );
 }
-
-export default App;

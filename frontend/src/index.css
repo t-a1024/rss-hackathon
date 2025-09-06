@@ -59,3 +59,10 @@ h1 {
     background-color: #f9f9f9;
   }
 } */
+@keyframes slide-up-fade {
+  0%   { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.animate-slide-up-fade {
+  animation: slide-up-fade 600ms ease-out both;
+}
