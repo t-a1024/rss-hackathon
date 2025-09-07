@@ -8,8 +8,10 @@
 サービスが提示する簡易的な助言によって，その後の円滑なコミュニケーションを促進します．
 ### 受賞歴
 本プロジェクトは，[RSS Hackathon 2025 Beyond](https://race-ss.co.jp/hackathon/2025/) にて，**奨励賞**を受賞しました．
+## デモ
 ## ローカル環境での実行方法
-1. 新しくTerminalを起動し，バックエンドサーバーを立ち上げる．
+1. .envファイルの作成
+2. 新しくTerminalを起動し，バックエンドサーバーを立ち上げる．
 ```bash
 # ./backend 直下に移動
 cd ./backend
@@ -18,7 +20,7 @@ npm install
 # サーバー立ち上げ
 npm run start
 ```
-2. 新しくTerminalを起動し，フロントエンドサーバーを立ち上げる．
+3. 新しくTerminalを起動し，フロントエンドサーバーを立ち上げる．
 ```bash
 # ./frontend 直下に移動
 cd ./frontend
@@ -27,7 +29,7 @@ npm install
 # サーバー立ち上げ
 npm run dev
 ```
-3. フロントエンドのローカルサーバー（https://localhost:5173/）にアクセスし，作業を行う．
+4. フロントエンドのローカルサーバー（https://localhost:5173/）にアクセスし，作業を行う．
 ## 技術スタック
 ![Tech Stack Image](./public/tech-stack.svg)
 
