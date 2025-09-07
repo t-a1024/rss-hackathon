@@ -35,6 +35,14 @@ npm run dev
 
 <table>
     <tr>
+        <th colspan="2">
+            Category
+        </th>
+        <th>
+            Tech Stack
+        </th>
+    </tr>
+    <tr>
         <td rowspan="2">
             Frontend
         </td>
@@ -69,7 +77,7 @@ npm run dev
             Framework
         </td>
         <td>
-            Node.js (Express), Gemini
+            Node.js, Express
         </td>
     </tr>
     <tr>
@@ -80,6 +88,16 @@ npm run dev
         </td>
         <td>
             Render
+        </td>
+    </tr>
+    <tr>
+        <td 
+        colspan="2"
+        >
+        External Services
+        </td>
+        <td>
+            Gemini
         </td>
     </tr>
 </table>
