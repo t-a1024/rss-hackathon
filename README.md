@@ -10,8 +10,22 @@
 本プロジェクトは，[RSS Hackathon 2025 Beyond](https://race-ss.co.jp/hackathon/2025/) にて，**奨励賞**を受賞しました．
 ## デモ
 ## ローカル環境での実行方法
-1. .envファイルの作成
-2. 新しくTerminalを起動し，バックエンドサーバーを立ち上げる．
+1. ./frontend直下に，以下の内容の.envファイルの作成
+```txt
+VITE_API_URL=http://localhost:3000
+GEMINI_API_KEY=""
+PORT=3000
+NODE_ENV=development
+CORS_ORIGIN="http://localhost:3000"
+```
+2. ./backend直下に，以下の内容の.envファイルの作成
+```txt
+GEMINI_API_KEY=""
+PORT=3000
+NODE_ENV=development
+CORS_ORIGIN="http://localhost:5173"
+```
+3. 新しくTerminalを起動し，バックエンドサーバーを立ち上げる．
 ```bash
 # ./backend 直下に移動
 cd ./backend
@@ -20,7 +34,7 @@ npm install
 # サーバー立ち上げ
 npm run start
 ```
-3. 新しくTerminalを起動し，フロントエンドサーバーを立ち上げる．
+4. 新しくTerminalを起動し，フロントエンドサーバーを立ち上げる．
 ```bash
 # ./frontend 直下に移動
 cd ./frontend
@@ -29,7 +43,7 @@ npm install
 # サーバー立ち上げ
 npm run dev
 ```
-4. フロントエンドのローカルサーバー（https://localhost:5173/）にアクセスし，作業を行う．
+5. フロントエンドのローカルサーバー（http://localhost:5173/）にアクセスし，作業を行う．
 ## 技術スタック
 ![Tech Stack Image](./public/tech-stack.svg)
 
