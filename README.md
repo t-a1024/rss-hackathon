@@ -12,10 +12,6 @@
 1. ./frontend直下に，以下の内容の.envファイルの作成
 ```txt
 VITE_API_URL=http://localhost:3000
-GEMINI_API_KEY=""
-PORT=3000
-NODE_ENV=development
-CORS_ORIGIN="http://localhost:3000"
 ```
 2. ./backend直下に，以下の内容の.envファイルの作成
 ```txt
