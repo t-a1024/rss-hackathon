@@ -42,10 +42,11 @@ npm install
 # サーバー立ち上げ
 npm run dev
 ```
-5. フロントエンドのローカルサーバー（http://localhost:5173/）にアクセスし，作業を行う．
+5. フロントエンドのローカルサーバー`http://localhost:5173/`にアクセスし，作業を行う．
 ## 技術スタック
+### 主要なもの
 ![Tech Stack Image](./public/tech-stack.svg)
-
+### 詳細Ver
 <table>
     <tr>
         <th colspan="2">
