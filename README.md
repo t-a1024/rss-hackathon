@@ -1,5 +1,5 @@
 # NANIMONO
-## 本アプリケーションの概要
+## アプリの概要
 **「初対面の人同士の気まずい雰囲気や，その時の役割分担の難しさ」という世の中の当たり前を解決する，Webアプリケーションです．**
 
 初対面の人同士が手軽かつ短時間で、お互いの役割を把握できるサービスです．
@@ -117,30 +117,24 @@ npm run dev
 </table>
 
 ## デモ
-1. 説明文
+1. ホーム画面
 ![Demo Image1](./public/demo-1.png)
-2. 説明文
+2. ホーム画面（URL表示）
 ![Demo Image1](./public/demo-2.png)
-3. 説明文
+3. ホーム画面（URLのコピー時）
 ![Demo Image1](./public/demo-3.png)
-4. 説明文
+4. 基本情報入力ページ
 ![Demo Image1](./public/demo-4.png)
-5. 説明文
+5. 基本情報入力の一例
 ![Demo Image1](./public/demo-5.png)
-6. 説明文
+6. 質問が表示されます
 ![Demo Image1](./public/demo-6.png)
-7. 説明文
+7. 回答例
 ![Demo Image1](./public/demo-7.png)
-8. 説明文
+8. 結果表示前待機ページ
 ![Demo Image1](./public/demo-8.png)
-9. 説明文
+9. 全員が質問を答え終えるまでは，結果表示ページには遷移しません
 ![Demo Image1](./public/demo-9.png)
-10. 説明文
+10. 結果表示ページ
 ![Demo Image1](./public/demo-10.png)
-11. 説明文
 ![Demo Image1](./public/demo-11.png)
-12. 説明文
-![Demo Image1](./public/demo-12.png)
-13. 説明文
-![Demo Image1](./public/demo-13.png)
-![Demo Image1](./public/demo-14.png)
